@@ -4,8 +4,7 @@ Volledige IoT-stack voor ESP32 mesh-netwerken met OTA, MQTT, dashboards en meer.
 
 ## 🔧 Installatie
 ```bash
-chmod +x setup.sh
-./setup.sh
+curl -O https://raw.githubusercontent.com/Revenberg/meshtastic-network/main/setup.sh;chmod +x setup.sh;./setup.sh
 ```
 
 🌐 Services
