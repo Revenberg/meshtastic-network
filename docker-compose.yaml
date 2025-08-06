@@ -58,4 +58,6 @@ services:
   esphome:
     image: esphome/esphome
     ports:
-      -
+      - "6052:6052"
+    volumes:
+      - ./esphome:/config
