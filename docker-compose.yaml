@@ -54,7 +54,7 @@ services:
       - ./docker/webserver:/usr/share/nginx/html
 
   esphome:
-    image: esphome/esphome
+    build: ./docker/esphome
     ports:
       - "6052:6052"
     volumes:

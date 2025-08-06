@@ -1,3 +1,0 @@
-esphome:
-  name: node_a
-  board: heltec_wifi_lora_32_V3
