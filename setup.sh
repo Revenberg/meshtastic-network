@@ -13,5 +13,5 @@ cd meshtastic-network
 TTY_DEV=$(ls /dev/ttyUSB* | head -n 1 || echo "/dev/ttyUSB0")
 echo "TTY_DEVICE=$TTY_DEV" > .env
 
-cd docker && docker-compose up -d --build
+cd docker && docker compose up -d --build
 echo "✅ Installatie voltooid"
