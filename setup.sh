@@ -7,6 +7,8 @@ curl -fsSL https://get.docker.com | sudo sh
 sudo usermod -aG docker $USER
 sudo pip3 install docker-compose
 
+rm -rf meshtastic-network
+
 git clone https://github.com/revenberg/meshtastic-network.git
 cd meshtastic-network
 
