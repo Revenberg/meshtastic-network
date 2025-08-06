@@ -1,0 +1,10 @@
+apiVersion: 1
+groups:
+- name: Battery Alerts
+  rules:
+  - uid: battery_low_node_a
+    title: 🔋 Node A – Laag Batterij
+    condition: "battery_percentage < 20"
+    for: "5m"
+    severity: warning
+    dashboardUid: battery-status

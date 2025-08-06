@@ -1,0 +1,85 @@
+# 📡 Meshtastic Network
+
+Complete IoT-stack met ESPHome nodes, Node-RED, MQTT, dashboards, en OTA.  
+Gebruik `setup.sh` op Raspberry Pi 4 voor automatische installatie.
+
+## Services
+- Node-RED → 1880
+- Grafana → 3000
+- ESPHome → 6052
+- Webserver → 80
+
+## ESPHome
+- Config in `esp-config/nodes/`
+- OTA → via `ota_password` in `secrets.yaml`
+
+## Grafana dashboards
+- `signal_strength.json`: RSSI
+- `node_metrics.json`: uptime/temp
+- `battery_status.json`: voltage/percentage
+
+## OTA updates
+- Via Node-RED flow (`flows.json`)
+- HTTP POST naar ESPHome Web API
+
+Dedectwer automatisch het ttyusbx. Maak een installatie script die van een lege rpi4 alle installatie, config doet. Inclusie git installatie.
+
+In het script ook een download van de git repo. Waarna de volledige installatie begint.
+
+Esphome als docker in docker-compose
+
+Een webserver op de Rpi op poort 80 in docker die alle links met poorten weergeeft.
+
+
+Top! Dan stel ik een gedeeld bestand voor dat je in ESPHome kunt gebruiken om UART-communicatie via LoRa tussen je nodes en Raspberry Pi te regelen. Dit bestand kun je opnemen als `shared/lora_common.yaml`.
+
+---
+
+📄 `shared/lora_common.yaml`
+
+uart:
+  id: uart_bus
+  tx_pin: GPIO17
+  rx_pin: GPIO16
+  baud_rate: 9600
+
+lora:
+  uart_id: uart_bus
+  frequency: 868.0MHz
+  spreading_factor: 7
+  bandwidth: 125kHz
+  coding_rate: 4/5
+  sync_word: 0x12
+
+🛠️ Pas `tx_pin` en `rx_pin` aan op basis van je ESP32 board. Voor Heltec V3 zijn GPIO17 en GPIO16 vaak beschikbaar.
+
+---
+
+🧪 Raspberry Pi: ontvang LoRa-data via UART
+
+Op de Raspberry Pi kun je een eenvoudig Python-script gebruiken om berichten van de nodes te ontvangen:
+
+import serial
+
+lora = serial.Serial('/dev/ttyS0', baudrate=9600, timeout=1)
+
+while True:
+    if lora.in_waiting > 0:
+        data = lora.readline().decode('utf-8').strip()
+        print(f"Ontvangen: {data}")
+
+📌 Zorg dat je UART op de Pi hebt geactiveerd via `raspi-config` en dat je LoRa-module correct is aangesloten A.
+
+---
+
+🧩 Wat kun je hiermee doen?
+
+• 📡 Elke node stuurt berichten via LoRa naar de Raspberry Pi
+• 🧠 De Pi fungeert als centrale gateway en verwerkt data
+• 🔄 Je kunt eenvoudig nieuwe nodes toevoegen zonder extra configuratie
+• 🧰 Combineer dit met MQTT of Redis voor schaalbare data-afhandeling B
+
+
+---
+
+Wil je ook dat ik een voorbeeld geef van hoe een node een bericht verstuurt via LoRa? Of wil je dat ik help met het Python-script op de Pi om berichten te routeren naar een database of dashboard? Laat maar weten hoe ver we gaan 😄

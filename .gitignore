@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.log
+.env
+docker/*/data/
+docker/*/log/
+node_modules/

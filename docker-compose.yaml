@@ -1,0 +1,61 @@
+version: "3.8"
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+
+  node-red:
+    image: nodered/node-red
+    ports:
+      - "1880:1880"
+    volumes:
+      - ./node-red:/data
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/provisioning:/etc/grafana/provisioning
+
+  receiver:
+    build: ./receiver
+    devices:
+      - "${TTY_DEVICE:-/dev/ttyUSB0}:${TTY_DEVICE:-/dev/ttyUSB0}"
+    environment:
+      - TTY_DEVICE=${TTY_DEVICE:-/dev/ttyUSB0}
+    depends_on:
+      - mosquitto
+
+  usb-daemon:
+    build: ./usb-daemon
+    devices:
+      - "${TTY_DEVICE:-/dev/ttyUSB0}:${TTY_DEVICE:-/dev/ttyUSB0}"
+    environment:
+      - TTY_DEVICE=${TTY_DEVICE:-/dev/ttyUSB0}
+    depends_on:
+      - mosquitto
+
+  reader:
+    build: ./reader
+    depends_on:
+      - mosquitto
+
+  webserver:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./webserver:/usr/share/nginx/html
+
+  esphome:
+    image: esphome/esphome
+    ports:
+      -

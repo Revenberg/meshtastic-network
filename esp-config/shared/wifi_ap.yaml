@@ -1,0 +1,4 @@
+wifi:
+  ap:
+    ssid: "MeshtasticNode"
+    password: !secret ap_password
