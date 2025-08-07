@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add User</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    form { margin-bottom: 1em; }
+    label { display: block; margin-top: 1em; }
+    input, select { padding: 0.3em; width: 250px; }
+    button { margin-top: 1em; padding: 0.5em 1em; }
+    #result { margin-top: 1em; color: green; }
+  </style>
+</head>
+<body>
+  <h2>Add User</h2>
+  <form id="userForm">
+    <label>User Name: <input type="text" id="userName" required></label>
+    <label>Team:
+      <select id="teamSelect" required>
+        <option value="">Loading teams...</option>
+      </select>
+    </label>
+    <button type="submit">Add User</button>
+  </form>
+  <div id="result"></div>
+  <script>
+    // Fetch teams from backend
+    fetch('/api/teams')
+      .then(res => res.json())
+      .then(teams => {
+        const select = document.getElementById('teamSelect');
+        select.innerHTML = '';
+        teams.forEach(team => {
+          const opt = document.createElement('option');
+          opt.value = team.id;
+          opt.textContent = team.team_name;
+          select.appendChild(opt);
+        });
+      });
+
+    document.getElementById('userForm').onsubmit = async function(e) {
+      e.preventDefault();
+      const user = {
+        userName: document.getElementById('userName').value,
+        teamId: document.getElementById('teamSelect').value
+      };
+      const response = await fetch('/api/add_user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+      });
+      if (response.ok) {
+        document.getElementById('result').innerText = 'User added!';
+        this.reset();
+      } else {
+        document.getElementById('result').innerText = 'Failed to add user.';
+      }
+    };
+  </script>
+</body>
+</html>

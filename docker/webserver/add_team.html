@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Team Registration</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    form { margin-bottom: 1em; }
+    label { display: block; margin-top: 1em; }
+    input { padding: 0.3em; width: 250px; }
+    button { margin-top: 1em; padding: 0.5em 1em; }
+    #result { margin-top: 1em; color: green; }
+  </style>
+</head>
+<body>
+  <h2>Register Your Team</h2>
+  <form id="teamForm">
+    <label>Team Name: <input type="text" id="teamName" required></label>
+    <label>Captain Name: <input type="text" id="captainName" required></label>
+    <button type="submit">Register</button>
+  </form>
+  <div id="result"></div>
+  <script>
+    document.getElementById('teamForm').onsubmit = async function(e) {
+      e.preventDefault();
+      const team = {
+        teamName: document.getElementById('teamName').value,
+        captainName: document.getElementById('captainName').value
+      };
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(team)
+      });
+      if (response.ok) {
+        document.getElementById('result').innerText = 'Team registered!';
+        this.reset();
+      } else {
+        document.getElementById('result').innerText = 'Registration failed.';
+      }
+    };
+  </script>
+</body>
+</html>

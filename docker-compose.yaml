@@ -1,4 +1,17 @@
 services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example_root_pw
+      MYSQL_DATABASE: meshtastic
+      MYSQL_USER: meshtastic
+      MYSQL_PASSWORD: example_pw
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
   mosquitto:
     image: eclipse-mosquitto
     ports:
