@@ -87,4 +87,4 @@ services:
     ports:
       - "6052:6052"
     volumes:
-      - ./docker/esphome:/config
+      - ./docker/esphome/esp-config:/config
