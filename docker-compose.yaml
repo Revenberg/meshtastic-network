@@ -55,10 +55,10 @@ services:
     depends_on:
       - mosquitto
 
-  reader:
-    build: ./docker/reader
-    depends_on:
-      - mosquitto
+#  reader:
+#    build: ./docker/reader
+#    depends_on:
+#      - mosquitto
 
   webserver:
     image: nginx:alpine
