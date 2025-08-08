@@ -22,11 +22,12 @@ esp32:
 logger:
   hardware_uart: "UART0"
 
-## WiFi configuration (Access Point only)
+## WiFi configuration (Access Point only, no scanning)
 wifi:
   ap:
     ssid: "meshtastic-node"
     password: "meshpassword"
+  # No fallback, no scanning for networks
 
 ## OTA (Over-the-Air) update support
 ota:
@@ -43,8 +44,7 @@ i2c:
     scl: 17
     scan: true
 
-## Captive portal for WiFi provisioning fallback
-captive_portal:
+
 
 ## Web server for local web interface
 web_server:
