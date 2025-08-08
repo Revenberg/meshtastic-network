@@ -54,8 +54,6 @@ external_components:
       type: local
       path: /config/my_components
 
-web_lora_component:
-  id: web_lora_component
 
 globals:
   - id: last_sent_number
