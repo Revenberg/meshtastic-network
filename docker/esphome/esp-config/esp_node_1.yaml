@@ -67,6 +67,22 @@ globals:
     type: int
     restore_value: no
     initial_value: '0'
+  - id: muon_cnt
+    type: int
+    restore_value: no
+    initial_value: '0'
+  - id: muon_event_rate
+    type: float
+    restore_value: no
+    initial_value: '0.0'
+  - id: background_cnt
+    type: int
+    restore_value: no
+    initial_value: '0'
+  - id: background_event_rate
+    type: float
+    restore_value: no
+    initial_value: '0.0'
 
 
 
