@@ -9,7 +9,8 @@ function connectWithRetry(retries = 10, delay = 3000) {
     host: 'mysql',
     user: 'meshtastic',
     password: 'example_pw',
-    database: 'meshtastic'
+    database: 'meshtastic',
+    port: 3306, // Default MySQL port
   });
 
   db.connect((err) => {
