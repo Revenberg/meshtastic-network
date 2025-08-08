@@ -62,7 +62,7 @@ number:
     mode: box
     set_action:
       - lambda: |-
-          esphome::global_web_lora_component->send_number(x);
+          global_web_lora_component->send_number(x);
 
 
 ## Use external component for LoRa send logic (C++ LoRa driver)
@@ -119,8 +119,8 @@ display:
     lambda: |-
       // Display muon and background event counts
       it.print(0,  2, id(roboto_10), "Muons");
-      it.printf(0, 10, id(roboto_16), "%08d %5.1f", id(muon_cnt), id(muon_event_rate).state);
+      it.printf(0, 10, id(roboto_16), "%08d %5.1f", id(muon_cnt), id(muon_event_rate));
       
       it.print(0, 32, id(roboto_10), "Background");
-      it.printf(0, 40, id(roboto_16), "%08d %5.1f", id(background_cnt), id(background_event_rate).state);
+      it.printf(0, 40, id(roboto_16), "%08d %5.1f", id(background_cnt), id(background_event_rate));
 
