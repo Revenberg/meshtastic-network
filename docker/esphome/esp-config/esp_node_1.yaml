@@ -3,6 +3,8 @@
 # Maintainer: Revenberg / meshtastic-network
 esphome:
   name: "heltec-wifi-lora-32-v3"
+  includes:
+    - my_components/web_lora_component/web_lora_component.h
 
 ## Board and framework
 esp32:
