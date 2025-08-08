@@ -52,7 +52,7 @@ number:
     mode: box
     set_action:
       - lambda: |-
-          id(web_lora_component).send_number(x);
+          esphome::global_web_lora_component->send_number(x);
 
 
 # Use external component for LoRa send logic

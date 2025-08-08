@@ -4,6 +4,10 @@
 
 namespace esphome {
 
+namespace esphome {
+
+WebLoraComponent *global_web_lora_component = nullptr;
+
 class WebLoraComponent : public Component {
  public:
   void setup() override {
@@ -24,4 +28,5 @@ class WebLoraComponent : public Component {
   }
 };
 
+} // namespace esphome
 } // namespace esphome
