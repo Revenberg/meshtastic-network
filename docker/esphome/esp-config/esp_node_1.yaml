@@ -1,12 +1,16 @@
+# ESPHome configuration for Heltec WiFi LoRa 32 V3 node
+# Provides web interface for number input, sends value via LoRa, displays status on OLED
+# Maintainer: Revenberg / meshtastic-network
 esphome:
   name: "heltec-wifi-lora-32-v3"
 
+## Board and framework
 esp32:
   board: esp32-s3-devkitc-1
   framework:
     type: arduino
-#    version: 2.0.9
-#    platform_version: 6.3.0
+    # version: 2.0.9
+    # platform_version: 6.3.0
 
 ##############################################################################
 #external_components:
@@ -14,33 +18,39 @@ esp32:
 #    path: "../esphome"
 #############################################################################
 
-# Enable logging
+## Enable logging for debugging
 logger:
   hardware_uart: "UART0"
 
+## WiFi configuration (Access Point only)
 wifi:
-  ssid: game
+  ap:
+    ssid: "meshtastic-node"
+    password: "meshpassword"
 
+## OTA (Over-the-Air) update support
 ota:
   platform: esphome
   password: !secret ota_password
 
-# Enable Home Assistant API
+## Enable Home Assistant API (optional)
 api:
 
-# I2C bus for display
+## I2C bus for OLED display
 i2c:
   - id: bus_a
     sda: 18
     scl: 17
     scan: true
 
+## Captive portal for WiFi provisioning fallback
 captive_portal:
 
+## Web server for local web interface
 web_server:
   local: true
 
-# Number input for web interface
+## Number input for web interface (sends value via LoRa)
 number:
   - platform: template
     name: "Send Number"
@@ -55,13 +65,14 @@ number:
           esphome::global_web_lora_component->send_number(x);
 
 
-# Use external component for LoRa send logic
+## Use external component for LoRa send logic (C++ LoRa driver)
 external_components:
   - source:
       type: local
       path: /config/my_components
 
 
+## Globals for display and state tracking
 globals:
   - id: last_sent_number
     type: int
@@ -86,6 +97,7 @@ globals:
 
 
 
+## Fonts for OLED display
 font:
 # gfonts://family[@weight]
 #  - file: "gfonts://Roboto+Mono"
@@ -96,6 +108,7 @@ font:
     id: roboto_10
     size: 10
 
+## OLED display configuration
 display:
   - platform: ssd1306_i2c
     model: "SSD1306 128x64"
@@ -104,6 +117,7 @@ display:
     address: 0x3C
     # auto_clear_enabled: false
     lambda: |-
+      // Display muon and background event counts
       it.print(0,  2, id(roboto_10), "Muons");
       it.printf(0, 10, id(roboto_16), "%08d %5.1f", id(muon_cnt), id(muon_event_rate).state);
       
