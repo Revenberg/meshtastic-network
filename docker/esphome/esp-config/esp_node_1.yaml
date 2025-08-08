@@ -47,17 +47,15 @@ number:
       - lambda: |-
           id(web_lora_component).send_number(x);
 
-# Custom component for LoRa send logic
-custom_component:
-  - lambda: |-
-      auto comp = new WebLoraComponent();
-      return {comp};
-    id: web_lora_component
 
+# Use external component for LoRa send logic
 external_components:
   - source:
       type: local
       path: /config/my_components
+
+web_lora_component:
+  id: web_lora_component
 
 globals:
   - id: last_sent_number
