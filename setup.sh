@@ -11,6 +11,8 @@ sudo rm -rf meshtastic-network 2>/dev/null
 
 git clone https://github.com/revenberg/meshtastic-network.git
 cd meshtastic-network
+cp update.sh ~/update.sh
+chmod +x ~/update.sh
 
 TTY_DEV=$(ls /dev/ttyUSB* | head -n 1 || echo "/dev/ttyUSB0")
 echo "TTY_DEVICE=$TTY_DEV" > .env

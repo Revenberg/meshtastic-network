@@ -21,12 +21,12 @@ services:
       - ./docker/mosquitto/data:/mosquitto/data
       - ./docker/mosquitto/log:/mosquitto/log
 
-  node-red:
-    image: nodered/node-red
-    ports:
-      - "1880:1880"
-    volumes:
-      - ./docker/node-red:/data
+#  node-red:
+#    image: nodered/node-red
+#    ports:
+#      - "1880:1880"
+#    volumes:
+#      - ./docker/node-red:/data
 
 #  grafana:
 #    image: grafana/grafana
