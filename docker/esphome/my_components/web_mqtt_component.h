@@ -1,8 +1,6 @@
 #include "esphome.h"
 #include <ESPAsyncWebServer.h>
 #include <PubSubClient.h>
-#include <SPI.h>
-#include <LoRa.h>
 
 class WebMqttComponent : public Component {
 public:
