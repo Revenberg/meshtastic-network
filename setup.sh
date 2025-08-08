@@ -24,5 +24,5 @@ HOST_IP=$(hostname -I | awk '{print $1}')
 sed -i "s/<HOST_IP>/$HOST_IP/g" docker/webserver/index.html
 
 #cd docker && docker compose up -d --build
-cd docker && docker compose up --build
+# cd docker && docker compose up --build
 echo "✅ Installatie voltooid"
