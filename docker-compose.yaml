@@ -1,18 +1,4 @@
 services:
-  mysql:
-    image: mysql:8.0
-    restart: always
-    hostname: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: example_root_pw
-      MYSQL_DATABASE: meshtastic
-      MYSQL_USER: meshtastic
-      MYSQL_PASSWORD: example_pw
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
-
   mosquitto:
     image: eclipse-mosquitto
     ports:
@@ -21,66 +7,6 @@ services:
       - ./docker/mosquitto/config:/mosquitto/config
       - ./docker/mosquitto/data:/mosquitto/data
       - ./docker/mosquitto/log:/mosquitto/log
-
-#  node-red:
-#    image: nodered/node-red
-#    ports:
-#      - "1880:1880"
-#    volumes:
-#      - ./docker/node-red:/data
-
-#  grafana:
-#    image: grafana/grafana
-#    ports:
-#      - "3000:3000"
-#    volumes:
-#      - ./docker/grafana/grafana.ini:/etc/grafana/grafana.ini
-#      - ./docker/grafana/provisioning:/etc/grafana/provisioning
-
-  receiver:
-    build: ./docker/receiver
-    devices:
-      - "${TTY_DEVICE:-/dev/ttyUSB0}:${TTY_DEVICE:-/dev/ttyUSB0}"
-    environment:
-      - TTY_DEVICE=${TTY_DEVICE:-/dev/ttyUSB0}
-    depends_on:
-      - mosquitto
-
-  usb-daemon:
-    build: ./docker/usb-daemon
-    devices:
-      - "${TTY_DEVICE:-/dev/ttyUSB0}:${TTY_DEVICE:-/dev/ttyUSB0}"
-    environment:
-      - TTY_DEVICE=${TTY_DEVICE:-/dev/ttyUSB0}
-    depends_on:
-      - mosquitto
-
-#  reader:
-#    build: ./docker/reader
-#    depends_on:
-#      - mosquitto
-
-  webserver:
-    image: nginx:alpine
-    ports:
-      - "80:80"
-    volumes:
-      - ./docker/webserver:/usr/share/nginx/html
-      - ./docker/webserver/default.conf:/etc/nginx/conf.d/default.conf:ro
-    depends_on:
-      - api
-
-  api:
-    build: ./docker/api
-    depends_on:
-      - mysql
-    environment:
-      - MYSQL_HOST=mysql
-      - MYSQL_USER=meshtastic
-      - MYSQL_PASSWORD=example_pw
-      - MYSQL_DATABASE=meshtastic
-    ports:
-      - "3001:3001"
 
   esphome:
     container_name: esphome
