@@ -53,9 +53,14 @@ globals:
 
 
 font:
-  - file: "fonts/Roboto-Regular.ttf"
-    id: font12
-    size: 12
+# gfonts://family[@weight]
+#  - file: "gfonts://Roboto+Mono"
+  - file: "gfonts://Nova+Mono"
+    id: roboto_16
+    size: 16
+  - file: "gfonts://Roboto"
+    id: roboto_10
+    size: 10
 
 display:
   - platform: ssd1306_i2c
