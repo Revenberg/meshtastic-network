@@ -4,13 +4,12 @@
 
 namespace esphome {
 
-namespace esphome {
-
 WebLoraComponent *global_web_lora_component = nullptr;
 
 class WebLoraComponent : public Component {
  public:
   void setup() override {
+    global_web_lora_component = this;
     // LoRa setup (adjust pins/frequency as needed)
     LoRa.setPins(8, 14, 12); // NSS, RST, DIO0 (example for Heltec v3)
     if (!LoRa.begin(868E6)) {
@@ -28,5 +27,4 @@ class WebLoraComponent : public Component {
   }
 };
 
-} // namespace esphome
 } // namespace esphome

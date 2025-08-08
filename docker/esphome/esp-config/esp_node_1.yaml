@@ -22,7 +22,7 @@ esp32:
 logger:
   hardware_uart: "UART0"
 
-## WiFi configuration (Access Point only, no scanning)
+## WiFi configuration (Access Point only)
 wifi:
   ap:
     ssid: "meshtastic-node"
