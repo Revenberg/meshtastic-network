@@ -28,6 +28,13 @@ ota:
 # Enable Home Assistant API
 api:
 
+# I2C bus for display
+i2c:
+  - id: bus_a
+    sda: 18
+    scl: 17
+    scan: true
+
 captive_portal:
 
 web_server:
