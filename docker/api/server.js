@@ -68,6 +68,20 @@ function startServer(db) {
     );
   });
 
+  // List users with team name
+  app.get('/api/users', (req, res) => {
+    db.query(
+      `SELECT users.user_name, teams.team_name, users.registered_at
+       FROM users
+       JOIN teams ON users.team_id = teams.id
+       ORDER BY users.registered_at DESC`,
+      (err, results) => {
+        if (err) return res.status(500).send('DB error');
+        res.json(results);
+      }
+    );
+  });
+
   app.listen(3001, () => console.log('API server running on 3001'));
 }
 
