@@ -4,7 +4,6 @@ substitutions:
 
 esphome:
   name: ${node_id}
-  platform: ESP32
   board: heltec_wifi_lora_32_V3
 
 wifi:
