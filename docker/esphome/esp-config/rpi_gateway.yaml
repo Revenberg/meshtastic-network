@@ -77,22 +77,6 @@ display:
       it.print(0, 32, id(roboto_10), "Background");
       it.printf(0, 40, id(roboto_16), "%08d %5.1f", id(background_cnt), id(background_event_rate).state);
 
-on_boot:
-  priority: -10
-  then:
-    - lambda: |-
-        uint8_t mac[6];
-        esp_read_mac(mac, ESP_MAC_WIFI_STA);
-        char buf[18];
-        sprintf(buf, "%02X:%02X:%02X:%02X:%02X:%02X",
-                mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-        id(mac_str) = std::string(buf);
-    - delay: 1s
-    - mqtt.publish:
-        topic: "rpi/name_request"
-        payload:
-          lambda: 'return id(mac_str).c_str();'
-
 external_components:
   - source: /config/my_components
 
