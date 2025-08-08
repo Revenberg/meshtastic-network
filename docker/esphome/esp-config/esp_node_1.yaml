@@ -1,0 +1,93 @@
+esphome:
+  name: "heltec-wifi-lora-32-v3"
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: arduino
+#    version: 2.0.9
+#    platform_version: 6.3.0
+
+##############################################################################
+#external_components:
+#  - source:
+#    path: "../esphome"
+#############################################################################
+
+# Enable logging
+logger:
+  hardware_uart: "UART0"
+
+wifi:
+  ssid: game
+
+ota:
+  platform: esphome
+  password: !secret ota_password
+
+# Enable Home Assistant API
+api:
+
+captive_portal:
+
+web_server:
+  local: true
+
+# Number input for web interface
+number:
+  - platform: template
+    name: "Send Number"
+    id: send_number
+    optimistic: true
+    min_value: 0
+    max_value: 999999
+    step: 1
+    mode: box
+    set_action:
+      - lambda: |-
+          id(web_lora_component).send_number(x);
+
+# Custom component for LoRa send logic
+custom_component:
+  - lambda: |-
+      auto comp = new WebLoraComponent();
+      return {comp};
+    id: web_lora_component
+
+external_components:
+  - source:
+      type: local
+      path: ../my_components
+
+globals:
+  - id: last_sent_number
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+
+
+font:
+# gfonts://family[@weight]
+#  - file: "gfonts://Roboto+Mono"
+  - file: "gfonts://Nova+Mono"
+    id: roboto_16
+    size: 16
+  - file: "gfonts://Roboto"
+    id: roboto_10
+    size: 10
+
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x64"
+    reset_pin: 21
+    i2c_id: bus_a
+    address: 0x3C
+    # auto_clear_enabled: false
+    lambda: |-
+      it.print(0,  2, id(roboto_10), "Muons");
+      it.printf(0, 10, id(roboto_16), "%08d %5.1f", id(muon_cnt), id(muon_event_rate).state);
+      
+      it.print(0, 32, id(roboto_10), "Background");
+      it.printf(0, 40, id(roboto_16), "%08d %5.1f", id(background_cnt), id(background_event_rate).state);
+
