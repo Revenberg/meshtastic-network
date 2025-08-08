@@ -57,7 +57,7 @@ custom_component:
 external_components:
   - source:
       type: local
-      path: ../my_components
+      path: /config/my_components
 
 globals:
   - id: last_sent_number
