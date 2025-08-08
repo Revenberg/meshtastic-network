@@ -1,35 +1,39 @@
-substitutions:
-  node_id: "rpi_gateway"
-  mqtt_broker: "mosquitto"
-
 esphome:
-  name: ${node_id}
+  name: "heltec-wifi-lora-32-v3"
 
 esp32:
+#  board: heltec_wifi_kit_32_V3
+ # variant: esp32s3
   board: esp32-s3-devkitc-1
   framework:
     type: arduino
+#    version: 2.0.9
+#    platform_version: 6.3.0
 
-wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-  ap:
-    ssid: "Fallback-${node_id}"
-    password: "fallback123"
+##############################################################################
+#external_components:
+#  - source:
+#    path: "../esphome"
+#############################################################################
 
 # Enable logging
 logger:
   hardware_uart: "UART0"
 
-# Enable Home Assistant API
-api:
- 
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
 ota:
   platform: esphome
   password: !secret ota_password
 
-captive_portal:
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret api_encryption_key
 
+captive_portal:
 web_server:
   local: true
 
@@ -37,25 +41,17 @@ i2c:
   - id: bus_a
     sda: 17
     scl: 18
-    
-mqtt:
-  broker: ${mqtt_broker}
-  discovery: false
+#  - id: bus_b
+#    sda: 41
+#    scl: 42
 
 globals:
-  - id: mac_str
-    type: std::string
-    initial_value: ''
-  - id: latest_msg
-    type: std::string
-    initial_value: ''
   - id: muon_cnt
     type: int
     initial_value: "1"
   - id: background_cnt
     type: int
     initial_value: "1"
-
 
 font:
 # gfonts://family[@weight]
@@ -80,14 +76,6 @@ display:
       
       it.print(0, 32, id(roboto_10), "Background");
       it.printf(0, 40, id(roboto_16), "%08d %5.1f", id(background_cnt), id(background_event_rate).state);
-
-external_components:
-  - source: /config/my_components
-
-custom_component:
-  - lambda: |-
-      auto web = new WebMqttComponent("${node_id}");
-      App.register_component(web);
 
 script:
   - id: trigger_muon
