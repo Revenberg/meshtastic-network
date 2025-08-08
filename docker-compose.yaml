@@ -11,6 +11,8 @@ services:
       - "3306:3306"
     volumes:
       - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - meshtastic-net
 
   mosquitto:
     image: eclipse-mosquitto
@@ -20,6 +22,8 @@ services:
       - ./docker/mosquitto/config:/mosquitto/config
       - ./docker/mosquitto/data:/mosquitto/data
       - ./docker/mosquitto/log:/mosquitto/log
+    networks:
+      - meshtastic-net
 
 #  node-red:
 #    image: nodered/node-red
@@ -44,6 +48,8 @@ services:
       - TTY_DEVICE=${TTY_DEVICE:-/dev/ttyUSB0}
     depends_on:
       - mosquitto
+    networks:
+      - meshtastic-net
 
   usb-daemon:
     build: ./docker/usb-daemon
@@ -53,11 +59,15 @@ services:
       - TTY_DEVICE=${TTY_DEVICE:-/dev/ttyUSB0}
     depends_on:
       - mosquitto
+    networks:
+      - meshtastic-net
 
   reader:
     build: ./docker/reader
     depends_on:
       - mosquitto
+    networks:
+      - meshtastic-net
 
   webserver:
     image: nginx:alpine
@@ -68,6 +78,8 @@ services:
       - ./docker/webserver/default.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - api
+    networks:
+      - meshtastic-net
 
   api:
     build: ./docker/api
@@ -80,6 +92,8 @@ services:
       - MYSQL_DATABASE=meshtastic
     ports:
       - "3001:3001"
+    networks:
+      - meshtastic-net
 
   esphome:
     build: ./docker/esphome
@@ -87,3 +101,9 @@ services:
       - "6052:6052"
     volumes:
       - ./docker/esphome:/config
+    networks:
+      - meshtastic-net
+# Custom network for all services
+networks:
+  meshtastic-net:
+    driver: bridge
