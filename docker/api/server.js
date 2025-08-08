@@ -41,7 +41,10 @@ function startServer(db) {
       'INSERT INTO teams (team_name, captain_name) VALUES (?, ?)',
       [teamName, captainName],
       (err) => {
-        if (err) return res.status(500).send('DB error');
+        if (err) {
+          console.error('DB error (register team):', err);
+          return res.status(500).send('DB error');
+        }
         res.status(200).send('OK');
       }
     );
@@ -49,7 +52,10 @@ function startServer(db) {
 
   app.get('/api/teams', (req, res) => {
     db.query('SELECT id, team_name FROM teams', (err, results) => {
-      if (err) return res.status(500).send('DB error');
+      if (err) {
+        console.error('DB error (get teams):', err);
+        return res.status(500).send('DB error');
+      }
       res.json(results);
     });
   });
@@ -62,7 +68,10 @@ function startServer(db) {
       'INSERT INTO users (user_name, team_id) VALUES (?, ?)',
       [userName, teamId],
       (err) => {
-        if (err) return res.status(500).send('DB error');
+        if (err) {
+          console.error('DB error (add user):', err);
+          return res.status(500).send('DB error');
+        }
         res.status(200).send('OK');
       }
     );
@@ -76,7 +85,10 @@ function startServer(db) {
        JOIN teams ON users.team_id = teams.id
        ORDER BY users.registered_at DESC`,
       (err, results) => {
-        if (err) return res.status(500).send('DB error');
+        if (err) {
+          console.error('DB error (list users):', err);
+          return res.status(500).send('DB error');
+        }
         res.json(results);
       }
     );
