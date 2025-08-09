@@ -1,0 +1,6 @@
+files:
+  - lora_node.h
+classes:
+  - class: LoRaNode
+    name: lora_node
+    schema: CONFIG_SCHEMA

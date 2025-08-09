@@ -1,11 +1,11 @@
 esphome:
-  name: heltec_node_1
+  name: heltec-node-1
   libraries:
     - "SPI"
     - "Ticker"
     - "SX126x-Arduino"
     - "https://github.com/sandeepmistry/arduino-LoRa.git"
-    
+
 external_components:
   - source:
       type: local
