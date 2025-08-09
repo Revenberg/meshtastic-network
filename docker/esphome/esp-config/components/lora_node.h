@@ -4,13 +4,17 @@
 
 namespace esphome {
 
+
 class LoRaNode : public Component {
  public:
   std::string node_name_;
 
-  static constexpr auto CONFIG_SCHEMA = esphome::config_schema::make_object(
-    esphome::config_schema::make_property<std::string>("name", &LoRaNode::node_name_)
-  );
+#ifdef USE_ESPHOME_EXTERNAL_COMPONENT_SCHEMA
+  static constexpr auto ESPHOME_EXTERNAL_COMPONENT_SCHEMA = \
+    esphome::config_schema::make_object(
+      esphome::config_schema::make_property<std::string>("name", &LoRaNode::node_name_)
+    );
+#endif
 
   void setup() override {
     LoRa.setPins(18, 14, 26);  // NSS, RST, DIO0
