@@ -1,4 +1,0 @@
-files:
-  - web_lora_component.h
-class: esphome::WebLoraComponent
-name: "Web LoRa Component"
