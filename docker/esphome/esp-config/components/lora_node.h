@@ -1,9 +1,16 @@
+
 #include "esphome.h"
 #include <LoRa.h>
 
-class LoRaNode : public esphome::Component {
+namespace esphome {
+
+class LoRaNode : public Component {
  public:
-  LoRaNode(const std::string &node_name) : node_name_(node_name) {}
+  std::string node_name_;
+
+  static constexpr auto CONFIG_SCHEMA = esphome::config_schema::make_object(
+    esphome::config_schema::make_property<std::string>("name", &LoRaNode::node_name_)
+  );
 
   void setup() override {
     LoRa.setPins(18, 14, 26);  // NSS, RST, DIO0
@@ -13,6 +20,9 @@ class LoRaNode : public esphome::Component {
       ESP_LOGI("LoRa", "LoRa gestart");
     }
   }
+
+
+
 
   void loop() override {
     static unsigned long last_send = 0;
@@ -45,6 +55,7 @@ class LoRaNode : public esphome::Component {
     }
   }
 
- private:
-  std::string node_name_;
+
 };
+
+} // namespace esphome
