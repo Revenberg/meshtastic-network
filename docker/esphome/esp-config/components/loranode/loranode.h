@@ -4,14 +4,7 @@
 #include <LoRa.h>
 #include <WiFi.h>
 
-using namespace esphome;
-using namespace text;
 
-from esphome.const import CONF_ID
-from esphome import config_schema as cv
-from esphome.components import text
-
-std::string node_name_;
 
 namespace esphome {
 
