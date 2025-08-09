@@ -10,10 +10,10 @@ esphome:
   includes:
     - my_components/web_lora_component/web_lora_component.h
 
-  external_components:
-    - source:
-        type: local
-        path: /config/my_components
+external_components:
+  - source:
+      type: local
+      path: /config/my_components
 
 esp32:
   board: esp32-s3-devkitc-1
