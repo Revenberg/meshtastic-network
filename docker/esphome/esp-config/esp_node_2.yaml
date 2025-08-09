@@ -22,10 +22,6 @@ ota:
   password: !secret ota_password
 
 
-api:
-  encryption:
-    key: !secret api_key
-
 wifi:
   ap:
     ssid: "meshtastic-node"
