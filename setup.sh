@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-sudo rm /var/lib/dpkg/lock
 #sudo apt update 
 #sudo apt upgrade -y 
 #sudo apt install -y git curl python3-pip python3-venv ca-certificates gnupg lsb-release
