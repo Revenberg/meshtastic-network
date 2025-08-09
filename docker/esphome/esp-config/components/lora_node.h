@@ -1,6 +1,8 @@
 
 #include "esphome.h"
+
 #include <LoRa.h>
+#include <WiFi.h>
 
 namespace esphome {
 

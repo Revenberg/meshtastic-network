@@ -4,7 +4,8 @@ esphome:
     - "SPI"
     - "Ticker"
     - "SX126x-Arduino"
-
+    - "https://github.com/sandeepmistry/arduino-LoRa.git"
+    
 external_components:
   - source:
       type: local
