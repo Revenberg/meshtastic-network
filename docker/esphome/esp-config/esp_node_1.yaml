@@ -2,7 +2,7 @@
 # Provides web interface for number input, sends value via LoRa, displays status on OLED
 # Maintainer: Revenberg / meshtastic-network
 esphome:
-  name: "heltec-wifi-lora-32-v3-node"
+  name: "heltec-wifi-lora-32-v3-node-1"
   includes:
     - my_components/web_lora_component/web_lora_component.h
 

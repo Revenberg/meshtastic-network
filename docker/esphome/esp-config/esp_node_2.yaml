@@ -7,7 +7,7 @@ esphome:
             pinMode(36, OUTPUT);
             digitalWrite(36, LOW);
             delay(100);
-			
+
 esp32:
   board: esp32-s3-devkitc-1
   framework:
@@ -30,7 +30,6 @@ wifi:
   ap:
     ssid: "meshtastic-node"
     password: "meshpassword"
-
 
 i2c:
   - id: bus_a
