@@ -1,7 +1,7 @@
 esphome:
   name: "heltec-wifi-lora-32-v3"
   includes:
-    - my_lora_component.h
+    - components/my_lora_component.h
   libraries:
     - "SPI"
     - "Ticker"

@@ -1,0 +1,45 @@
+esphome:
+  name: heltec_node_1
+  includes:
+    - - components/lora_node.h
+
+esp32:
+  board: heltec_wifi_lora_32_V3
+  framework:
+    type: arduino
+
+logger:
+
+spi:
+  clk_pin: GPIO5
+  mosi_pin: GPIO27
+  miso_pin: GPIO19
+
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+
+font:
+  - file: "arial.ttf"
+    id: font1
+    size: 12
+
+globals:
+  - id: received_msg
+    type: std::string
+    restore_value: no
+    initial_value: '"Wachten op bericht..."'
+
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x64"
+    address: 0x3C
+    lambda: |-
+      it.printf(0, 0, id(font1), "Node 1");
+      it.printf(0, 20, id(font1), "Ontvangen:");
+      it.printf(0, 40, id(font1), "%s", id(received_msg).c_str());
+
+custom_component:
+  - lambda: |-
+      auto lora = new LoRaNode("Node 1");
+      return {lora};

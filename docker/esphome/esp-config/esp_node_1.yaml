@@ -4,7 +4,7 @@
 esphome:
   name: "heltec-wifi-lora-32-v3-node-1"
   includes:
-    - my_components/web_lora_component/web_lora_component.h
+    - components/web_lora_component/web_lora_component.h
 
 ## Board and framework
 esp32:
