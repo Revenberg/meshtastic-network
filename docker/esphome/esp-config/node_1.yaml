@@ -1,7 +1,5 @@
 esphome:
   name: heltec_node_1
-  includes:
-    - components/lora_node.h
   libraries:
     - "SPI"
     - "Ticker"
