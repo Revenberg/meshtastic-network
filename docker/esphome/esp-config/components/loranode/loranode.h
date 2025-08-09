@@ -4,7 +4,17 @@
 #include <LoRa.h>
 #include <WiFi.h>
 
+import esphome.config_validation as cv
+import esphome.codegen as cg
 
+from esphome.const import CONF_ID
+std::string node_name_;
+
+CONFIG_SCHEMA = cv.Schema({
+    cv.GenerateID(): cv.declare_id(LoRaNode),
+    cv.Required(CONF_ID): cv.string,
+    cv.Optional("name"): cv.string
+}).extend(cv.COMPONENT_SCHEMA)
 
 namespace esphome {
 
@@ -25,9 +35,6 @@ class LoRaNode : public Component {
       ESP_LOGI("LoRa", "LoRa gestart");
     }
   }
-
-
-
 
   void loop() override {
     static unsigned long last_send = 0;
