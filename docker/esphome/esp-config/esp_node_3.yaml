@@ -53,7 +53,7 @@ display:
         (uint8_t)(ESP.getEfuseMac() >> 16),
         (uint8_t)(ESP.getEfuseMac() >> 8),
         (uint8_t)(ESP.getEfuseMac()));
-      it.print(4, 4, id(roboto_20), "Hello World! " + mac);
+      it.print(4, 4, id(roboto_20), "Hello World node 3! " + mac);
 
 font:
   - file: "gfonts://Roboto"
