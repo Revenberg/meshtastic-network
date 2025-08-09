@@ -4,8 +4,21 @@
 #include <LoRa.h>
 #include <WiFi.h>
 
-namespace esphome {
+using namespace esphome;
+using namespace text;
 
+from esphome.const import CONF_ID
+from esphome import config_schema as cv
+from esphome.components import text
+
+std::string node_name_;
+
+CONFIG_SCHEMA = text.TEXT_SCHEMA.extend({
+    cv.Required(CONF_ID): cv.declare_id(lora_node),
+    cv.optional("name"): cv.string
+}).extend(cv.COMPONENT_SCHEMA)
+
+namespace esphome {
 
 class LoRaNode : public Component {
  public:
