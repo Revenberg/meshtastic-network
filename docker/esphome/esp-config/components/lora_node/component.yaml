@@ -1,0 +1,4 @@
+implementation: lora_node.h
+class:
+  name: LoRaNode
+  schema: CONFIG_SCHEMA
