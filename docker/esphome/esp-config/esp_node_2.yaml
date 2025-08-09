@@ -1,0 +1,52 @@
+esphome:
+  name: lora-receiver
+  on_boot:
+    - priority: 1000
+      then:
+        - lambda: |-
+            pinMode(36, OUTPUT);
+            digitalWrite(36, LOW);
+            delay(100);
+			
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: arduino
+
+logger:
+  level: VERBOSE
+
+## OTA (Over-the-Air) update support
+ota:
+  platform: esphome
+  password: !secret ota_password
+
+
+api:
+  encryption:
+    key: !secret api_key
+
+wifi:
+  ap:
+    ssid: "meshtastic-node"
+    password: "meshpassword"
+
+
+i2c:
+  - id: bus_a
+    sda: 17
+    scl: 18
+
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x64"
+    reset_pin: 21
+    i2c_id: bus_a
+    address: 0x3C
+    lambda: |-
+       it.print(4, 4, id(roboto_20), "Hello World!");
+
+font:
+  - file: "gfonts://Roboto"
+    id: roboto_20
+    size: 20
