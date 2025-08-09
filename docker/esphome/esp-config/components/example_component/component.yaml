@@ -1,0 +1,6 @@
+files:
+  - example_component.h
+classes:
+  - class: ExampleComponent
+    name: example_component
+    schema: CONFIG_SCHEMA

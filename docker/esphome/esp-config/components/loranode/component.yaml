@@ -1,0 +1,6 @@
+files:
+  - loranode.h
+classes:
+  - class: LoRaNode
+    name: loranode
+    schema: CONFIG_SCHEMA

@@ -13,11 +13,6 @@ from esphome.components import text
 
 std::string node_name_;
 
-CONFIG_SCHEMA = text.TEXT_SCHEMA.extend({
-    cv.Required(CONF_ID): cv.declare_id(loranode),
-    cv.optional("name"): cv.string
-}).extend(cv.COMPONENT_SCHEMA)
-
 namespace esphome {
 
 class LoRaNode : public Component {
