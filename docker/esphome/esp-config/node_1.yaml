@@ -2,6 +2,15 @@ esphome:
   name: heltec_node_1
   includes:
     - components/lora_node.h
+  libraries:
+    - "SPI"
+    - "Ticker"
+    - "SX126x-Arduino"
+
+external_components:
+  - source:
+      type: local
+      path: /config/components
 
 esp32:
   board: heltec_wifi_lora_32_V3
@@ -41,11 +50,6 @@ display:
       it.printf(0, 0, id(font1), "Node 1");
       it.printf(0, 20, id(font1), "Ontvangen:");
       it.printf(0, 40, id(font1), "%s", id(received_msg).c_str());
-
-external_components:
-  - source:
-      type: local
-      path: components
 
 # LoRaNode external component instance
 lora_node:
