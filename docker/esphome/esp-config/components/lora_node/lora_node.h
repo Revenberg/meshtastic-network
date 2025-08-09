@@ -11,10 +11,14 @@ class LoRaNode : public Component {
  public:
   std::string node_name_;
 
-  static constexpr auto CONFIG_SCHEMA = \
-    esphome::config_schema::make_object(
-      esphome::config_schema::make_property<std::string>("name", &LoRaNode::node_name_)
-    );
+//  static constexpr auto CONFIG_SCHEMA = \
+//    esphome::config_schema::make_object(
+//      esphome::config_schema::make_property<std::string>("name", &LoRaNode::node_name_)
+//    );
+
+  CONFIG_SCHEMA = cv.Schema({
+    cv.Required(node_name_): cv.string
+  });
 
   void setup() override {
     LoRa.setPins(18, 14, 26);  // NSS, RST, DIO0
