@@ -1,7 +1,7 @@
 esphome:
   name: heltec_node_1
   includes:
-    - - components/lora_node.h
+    - components/lora_node.h
 
 esp32:
   board: heltec_wifi_lora_32_V3
@@ -11,18 +11,19 @@ esp32:
 logger:
 
 spi:
-  clk_pin: GPIO5
-  mosi_pin: GPIO27
-  miso_pin: GPIO19
+  clk_pin: GPIO9
+  mosi_pin: GPIO10
+  miso_pin: GPIO11
 
 i2c:
-  sda: GPIO21
-  scl: GPIO22
+  - id: bus_a
+    sda: 17
+    scl: 18
 
 font:
-  - file: "arial.ttf"
-    id: font1
-    size: 12
+  - file: "gfonts://Roboto"
+    id: roboto_20
+    size: 20
 
 globals:
   - id: received_msg
@@ -33,13 +34,19 @@ globals:
 display:
   - platform: ssd1306_i2c
     model: "SSD1306 128x64"
+    reset_pin: 21
+    i2c_id: bus_a
     address: 0x3C
     lambda: |-
       it.printf(0, 0, id(font1), "Node 1");
       it.printf(0, 20, id(font1), "Ontvangen:");
       it.printf(0, 40, id(font1), "%s", id(received_msg).c_str());
 
-custom_component:
-  - lambda: |-
-      auto lora = new LoRaNode("Node 1");
-      return {lora};
+external_components:
+  - source:
+      type: local
+      path: components
+
+# LoRaNode external component instance
+lora_node:
+  name: "Node 1"
