@@ -1,10 +1,5 @@
-globals:
-  - id: last_lora_message
-    type: std::string
-    restore_value: no
-    initial_value: '""'
 esphome:
-  name: lora-receiver
+  name: lora-gateway
   on_boot:
     - priority: 1000
       then:
@@ -15,10 +10,25 @@ esphome:
   includes:
     - my_components/web_lora_component/web_lora_component.h
 
-  external_components:
-    - source:
-        type: local
-        path: /config/my_components
+external_components:
+  - source:
+      type: local
+      path: /config/my_components
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: arduino
+
+logger:
+  level: VERBOSE
+
+
+globals:
+  - id: last_lora_message
+    type: std::string
+    restore_value: no
+    initial_value: '""'
 
 display:
   - platform: ssd1306_i2c
