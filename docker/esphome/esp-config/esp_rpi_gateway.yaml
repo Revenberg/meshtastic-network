@@ -9,7 +9,8 @@ esphome:
             delay(100);
   includes:
     - my_components/web_lora_component/web_lora_component.h
-
+  libraries:
+    - "SPI"
 external_components:
   - source:
       type: local

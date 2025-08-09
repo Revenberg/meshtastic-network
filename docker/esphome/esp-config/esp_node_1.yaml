@@ -33,8 +33,8 @@ wifi:
 
 ## OTA (Over-the-Air) update support
 ota:
+  password: "8a64d4b2cc48d7fe3a6b2f0a28d368d3"
   platform: esphome
-  password: !secret ota_password
 
 ## Enable Home Assistant API (optional)
 api:

@@ -8,7 +8,14 @@ esphome:
             digitalWrite(36, LOW);
             delay(100);
   includes:
-    - my_components/web_lora_component/web_lora_component.h
+  #  - my_lora_component.h
+    - components/lora/sender.h
+    - components/lora/esphome_lora_version.h
+  libraries:
+    - "SPI"
+    - "Ticker"
+    - "SX126x-Arduino"
+
 
 external_components:
   - source:
@@ -25,9 +32,8 @@ logger:
 
 ## OTA (Over-the-Air) update support
 ota:
+  password: "8a64d4b2cc48d7fe3a6b2f0a28d368d3"
   platform: esphome
-  password: !secret ota_password
-
 
 wifi:
   ap:
@@ -74,3 +80,10 @@ interval:
             (uint8_t)(ESP.getEfuseMac()));
           ESP_LOGI("lora", "Sending MAC via LoRa: %s", mac);
           global_web_lora_component->send_number((int32_t)ESP.getEfuseMac());
+
+custom_component:
+  - lambda: |-
+      auto my_custom = new MyCustomComponent();
+      return {my_custom};
+    components:
+      - id: my_custom_id

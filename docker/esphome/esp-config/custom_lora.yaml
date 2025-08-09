@@ -1,0 +1,61 @@
+esphome:
+  name: "heltec-wifi-lora-32-v3"
+  includes:
+    - my_lora_component.h
+  libraries:
+    - "SPI"
+    - "Ticker"
+    - "SX126x-Arduino"
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: arduino
+
+##############################################################################
+#external_components:
+#  - source:
+#    path: "../esphome"
+#############################################################################
+
+# Enable logging
+logger:
+
+wifi:
+  ap:
+    ssid: "meshtastic-node"
+    password: "meshpassword"
+
+## OTA (Over-the-Air) update support
+ota:
+  password: "8a64d4b2cc48d7fe3a6b2f0a28d368d3"
+  platform: esphome
+
+spi:
+  clk_pin: GPIO9
+  mosi_pin: GPIO10
+  miso_pin: GPIO11
+
+i2c:
+  - id: bus_a
+    sda: 17
+    scl: 18
+
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x64"
+    reset_pin: 21
+    i2c_id: bus_a
+    address: 0x3C
+    lambda: |-
+      it.fill(COLOR_ON);
+      it.fill(COLOR_OFF);
+
+#############################################################################
+# Example configuration entry
+custom_component:
+  - lambda: |-
+      auto my_custom = new MyCustomComponent();
+      return {my_custom};
+    components:
+      - id: my_custom_id
