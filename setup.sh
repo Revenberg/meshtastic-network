@@ -11,7 +11,7 @@ sudo rm -rf meshtastic-network 2>/dev/null
 
 git clone https://github.com/revenberg/meshtastic-network.git
 
-cd ~/meshtastic-network/docker && docker down
+cd ~/meshtastic-network/docker && docker compose down
 
 cd ~/meshtastic-network
 cp update.sh ~/update.sh
