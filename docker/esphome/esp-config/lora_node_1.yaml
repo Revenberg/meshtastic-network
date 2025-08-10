@@ -50,5 +50,5 @@ display:
       it.printf(0, 20, id(font1), "Ontvangen:");
       it.printf(0, 40, id(font1), "%s", id(received_msg).c_str());
 
-lora_node:
+heltec_wifi_lora:
   name: "Node 1"
