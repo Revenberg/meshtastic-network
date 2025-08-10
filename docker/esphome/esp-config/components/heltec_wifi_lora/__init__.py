@@ -9,7 +9,7 @@ heltec_wifi_lora = heltec_wifi_lora_ns.class_("heltec_wifi_lora", cg.PollingComp
 DEPENDENCIES = ['uart']
 AUTO_LOAD = ['uart', 'sensor', "binary_sensor" ]
 
-CONF_heltec_wifi_lora_NAME = "heltec_wifi_lora_1"
+CONF_heltec_wifi_lora_NAME = "name"
 
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(heltec_wifi_lora),    
