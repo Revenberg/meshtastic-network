@@ -28,16 +28,22 @@ i2c:
     sda: 17
     scl: 18
 
-font:
-  - file: "gfonts://Roboto"
-    id: roboto_20
-    size: 20
-
 globals:
   - id: received_msg
     type: std::string
     restore_value: no
     initial_value: '"Wachten op bericht..."'
+
+## Fonts for OLED display
+font:
+# gfonts://family[@weight]
+#  - file: "gfonts://Roboto+Mono"
+  - file: "gfonts://Nova+Mono"
+    id: roboto_16
+    size: 16
+  - file: "gfonts://Roboto"
+    id: roboto_10
+    size: 10
 
 display:
   - platform: ssd1306_i2c
@@ -46,9 +52,9 @@ display:
     i2c_id: bus_a
     address: 0x3C
     lambda: |-
-      it.printf(0, 0, id(font1), "Node 1");
-      it.printf(0, 20, id(font1), "Ontvangen:");
-      it.printf(0, 40, id(font1), "%s", id(received_msg).c_str());
+      it.printf(0, 0, id(roboto_10), "Node 1");
+      it.printf(0, 20, id(roboto_10), "Ontvangen:");
+      it.printf(0, 40, id(roboto_10), "%s", id(received_msg).c_str());
 
 heltec_wifi_lora:
   name: "Node 1"
