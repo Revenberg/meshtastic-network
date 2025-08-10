@@ -13,7 +13,7 @@ namespace esphome
   namespace heltec_wifi_lora
   {
 
-    class heltec_wifi_lora : public PollingComponent, public spi::spiDevice
+    class heltec_wifi_lora : public PollingComponent 
     {
     public:
       void setup() override;
