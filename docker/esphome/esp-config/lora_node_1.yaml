@@ -3,7 +3,6 @@ esphome:
   libraries:
     - "SPI"
     - "WIFI"
-    - "network"
     - "Ticker"
     - "SX126x-Arduino"
     - "https://github.com/sandeepmistry/arduino-LoRa.git"

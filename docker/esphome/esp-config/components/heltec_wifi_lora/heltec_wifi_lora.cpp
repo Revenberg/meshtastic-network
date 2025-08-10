@@ -1,8 +1,8 @@
 #include "esphome/core/component.h"
 #include "esphome/core/log.h"
-#include "esphome/core/Network.h"
 #include "heltec_wifi_lora.h"
 #include <LoRa.h>
+#include "esphome/core/network.h"
 #include <WiFi.h>
 
 
