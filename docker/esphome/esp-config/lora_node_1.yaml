@@ -50,5 +50,5 @@ display:
       it.printf(0, 20, id(font1), "Ontvangen:");
       it.printf(0, 40, id(font1), "%s", id(received_msg).c_str());
 
-loranode:
+lora_node:
   name: "Node 1"
