@@ -1,6 +1,5 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import PollingComponent
 from esphome.const import *
 
 heltec_wifi_lora_ns = cg.esphome_ns.namespace('heltec_wifi_lora')
