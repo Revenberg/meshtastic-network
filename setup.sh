@@ -23,6 +23,5 @@ HOST_IP=$(hostname -I | awk '{print $1}')
 # Vervang <HOST_IP> in index.html door het werkelijke IP-adres
 sed -i "s/<HOST_IP>/$HOST_IP/g" docker/webserver/index.html
 
-#cd docker && docker compose up -d --build
-cd docker && docker compose up --build  --remove-orphans
+cd docker && docker compose up -d --build --remove-orphans
 echo "✅ Installatie voltooid"
