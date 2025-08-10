@@ -8,10 +8,10 @@ set -e
 #sudo pip3 install docker-compose
 
 sudo rm -rf meshtastic-network 2>/dev/null 
-
+cd ~
 git clone https://github.com/revenberg/meshtastic-network.git
 
-cd ~/meshtastic-network
+cd meshtastic-network
 cd docker
 docker compose down
 
