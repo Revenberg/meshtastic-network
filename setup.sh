@@ -10,7 +10,10 @@ set -e
 sudo rm -rf meshtastic-network 2>/dev/null 
 
 git clone https://github.com/revenberg/meshtastic-network.git
-cd meshtastic-network
+
+cd docker && docker down
+
+cd ~/cd meshtastic-network
 cp update.sh ~/update.sh
 chmod +x ~/update.sh
 
