@@ -1,9 +1,10 @@
 #include "esphome/core/component.h"
 #include "esphome/core/log.h"
 #include "heltec_wifi_lora.h"
+#include "network.h"
 #include <ArduinoJson.h>
 #include <LoRa.h>
-
+#include <WiFi.h>
 
 namespace esphome {
 namespace heltec_wifi_lora {

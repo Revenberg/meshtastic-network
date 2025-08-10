@@ -2,6 +2,8 @@ esphome:
   name: heltec-node-1
   libraries:
     - "SPI"
+    - "WIFI"
+    - "network"
     - "Ticker"
     - "SX126x-Arduino"
     - "https://github.com/sandeepmistry/arduino-LoRa.git"
