@@ -48,7 +48,9 @@ void heltec_wifi_lora::loop() {
     }
 
     ESP_LOGI("LoRa", "Ontvangen: %s", received.c_str());
-    id(received_msg) = received.c_str();
+    if (this->received_msg_sensor_) {
+      this->received_msg_sensor_->publish_state(received.c_str());
+    }
   }
 }
 

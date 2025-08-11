@@ -1,18 +1,25 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.const import *
+import esphome.components.text_sensor as text_sensor
 
 heltec_wifi_lora_ns = cg.esphome_ns.namespace('heltec_wifi_lora')
 heltec_wifi_lora = heltec_wifi_lora_ns.class_("heltec_wifi_lora", cg.PollingComponent)
 
-DEPENDENCIES = []
-AUTO_LOAD = [ ]
+DEPENDENCIES = ['text_sensor']
+AUTO_LOAD = ['text_sensor']
 
 CONF_heltec_wifi_lora_NAME = "name"
+received_msg = "received_msg"
 
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(heltec_wifi_lora),    
     cv.Required(CONF_heltec_wifi_lora_NAME): cv.string,
+
+    cv.Optional(received_msg): cv.use_id(text_sensor.TextSensor),
+    cv.Optional(CONF_ID): cv.declare_id(heltec_wifi_lora),
+    cv.Optional(CONF_heltec_wifi_lora_NAME): cv.string,
+
 }).extend(cv.polling_component_schema('60s'))
 
 def to_code(config):

@@ -24,6 +24,7 @@ namespace esphome
       void update() override;
       void dump_config() override;
       void set_node_name(const std::string &name) { node_name = name; }
+      void set_received_msg_sensor(esphome::text_sensor::TextSensor *sensor) { received_msg_sensor_ = sensor; }
 
 
     protected:
@@ -31,6 +32,7 @@ namespace esphome
       unsigned long previousMillis = 0;
       int counter = 0;
       unsigned long previousSendMillis = 0;
+      esphome::text_sensor::TextSensor *received_msg_sensor_{nullptr};
     };
 
   } // namespace heltec_wifi_lora

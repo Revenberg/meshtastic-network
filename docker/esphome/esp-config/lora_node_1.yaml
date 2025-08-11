@@ -19,6 +19,7 @@ esp32:
 
 logger:
 
+  
 ## WiFi configuration (Access Point only)
 wifi:
   ap:
@@ -36,11 +37,11 @@ i2c:
     sda: 17
     scl: 18
 
-globals:
+text_sensor:
   - id: received_msg
-    type: std::string
-    restore_value: no
-    initial_value: '"Wachten op bericht..."'
+    name: "Received Message"
+    icon: "mdi:message-text"
+
 
 ## Fonts for OLED display
 font:
@@ -66,3 +67,4 @@ display:
 
 heltec_wifi_lora:
   name: "Node 1"
+  received_msg_sensor: received_msg
