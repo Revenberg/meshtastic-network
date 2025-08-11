@@ -7,7 +7,7 @@ heltec_wifi_lora_ns = cg.esphome_ns.namespace('heltec_wifi_lora')
 heltec_wifi_lora = heltec_wifi_lora_ns.class_("heltec_wifi_lora", cg.PollingComponent)
 
 DEPENDENCIES = ['text_sensor']
-AUTO_LOAD = ['text_sensor']
+AUTO_LOAD = ['sensor', 'text_sensor']
 
 CONF_heltec_wifi_lora_NAME = "name"
 received_msg_sensor = "received_msg_sensor"
