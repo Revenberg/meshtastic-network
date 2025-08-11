@@ -35,9 +35,9 @@ void heltec_wifi_lora::loop() {
     msg += " | Count: ";
     msg += String(counter++);
 
-    LoRa.beginPacket();
-    LoRa.print(msg);
-    LoRa.endPacket();
+//    LoRa.beginPacket();
+//    LoRa.print(msg);
+//    LoRa.endPacket();
 
     ESP_LOGI("LoRa", "Verzonden: %s", msg.c_str());
   }
