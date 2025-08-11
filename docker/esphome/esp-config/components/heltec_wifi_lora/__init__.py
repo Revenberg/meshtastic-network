@@ -1,7 +1,7 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.const import *
-import esphome.components.text_sensor as text_sensor
+from esphome.components import text_sensor
 
 heltec_wifi_lora_ns = cg.esphome_ns.namespace('heltec_wifi_lora')
 heltec_wifi_lora = heltec_wifi_lora_ns.class_("heltec_wifi_lora", cg.PollingComponent)
