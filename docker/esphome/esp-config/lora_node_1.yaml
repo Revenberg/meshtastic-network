@@ -64,7 +64,7 @@ display:
     lambda: |-
       it.printf(0, 0, id(roboto_10), "Node 1");
       it.printf(0, 20, id(roboto_10), "Ontvangen:");
-      it.printf(0, 40, id(roboto_10), "%s", id(received_msg).c_str());
+      it.printf(0, 40, id(roboto_10), "%s", id(received_msg));
 
 heltec_wifi_lora:
   name: "Node 1"

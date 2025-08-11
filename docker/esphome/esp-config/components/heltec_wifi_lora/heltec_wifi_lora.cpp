@@ -15,12 +15,12 @@ namespace heltec_wifi_lora {
 static const char *TAG = "heltec_wifi_lora";
 
 void heltec_wifi_lora::setup() {
-  LoRa.setPins(18, 14, 26);  // NSS, RST, DIO0
-  if (!LoRa.begin(868E6)) {
-    ESP_LOGE("LoRa", "Starten mislukt!");
-  } else {
-    ESP_LOGI("LoRa", "LoRa gestart");
-  }
+ // LoRa.setPins(18, 14, 26);  // NSS, RST, DIO0
+ // if (!LoRa.begin(868E6)) {
+ //   ESP_LOGE("LoRa", "Starten mislukt!");
+ // } else {
+ //   ESP_LOGI("LoRa", "LoRa gestart");
+ // }
 }
 
 void heltec_wifi_lora::loop() {
@@ -35,9 +35,9 @@ void heltec_wifi_lora::loop() {
     msg += " | Count: ";
     msg += String(counter++);
 
-//    LoRa.beginPacket();
-//    LoRa.print(msg);
-//    LoRa.endPacket();
+  //  LoRa.beginPacket();
+  //  LoRa.print(msg);
+  //  LoRa.endPacket();
 
     ESP_LOGI("LoRa", "Verzonden: %s", msg.c_str());
   }
@@ -53,6 +53,7 @@ void heltec_wifi_lora::loop() {
     if (this->received_msg_sensor_) {
       this->received_msg_sensor_->publish_state(received.c_str());
     }
+    yield();
   }
 }
 
