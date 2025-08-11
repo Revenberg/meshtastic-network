@@ -3,7 +3,6 @@
 #include "esphome/core/component.h"
 #include "esphome/core/log.h"
 #include "heltec_wifi_lora.h"
-#include "esphome/core/network.h"
 #include <SPI.h>
 #include <WiFi.h>
 
