@@ -27,7 +27,7 @@ void heltec_wifi_lora::loop() {
 
   if (millis() - last_send > 10000) {
     last_send = millis();
-    String msg = node_name_.c_str();
+    String msg = this->node_name.c_str();
     msg += " | MAC: ";
     msg += WiFi.macAddress();
     msg += " | Count: ";

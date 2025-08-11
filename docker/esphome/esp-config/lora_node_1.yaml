@@ -19,6 +19,13 @@ esp32:
 
 logger:
 
+## WiFi configuration (Access Point only)
+wifi:
+  ap:
+    ssid: "meshtastic-node"
+    password: "meshpassword"
+  # No fallback, no scanning for networks
+
 spi:
   clk_pin: GPIO9
   mosi_pin: GPIO10

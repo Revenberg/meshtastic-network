@@ -23,6 +23,7 @@ namespace esphome
       void loop() override;
       void update() override;
       void dump_config() override;
+      void set_node_name(const std::string &name) { node_name = name; }
 
 
     protected:
