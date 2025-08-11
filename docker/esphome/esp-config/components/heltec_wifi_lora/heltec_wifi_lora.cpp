@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "esphome/core/component.h"
 #include "esphome/core/log.h"
 #include "heltec_wifi_lora.h"
