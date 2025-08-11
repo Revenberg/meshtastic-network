@@ -38,7 +38,8 @@ i2c:
     scl: 18
 
 text_sensor:
-  - id: received_msg
+  - platform: template
+    id: received_msg
     name: "Received Message"
     icon: "mdi:message-text"
 

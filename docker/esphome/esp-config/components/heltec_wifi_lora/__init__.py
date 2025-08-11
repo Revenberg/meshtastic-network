@@ -10,13 +10,13 @@ DEPENDENCIES = ['text_sensor']
 AUTO_LOAD = ['text_sensor']
 
 CONF_heltec_wifi_lora_NAME = "name"
-received_msg = "received_msg"
+received_msg_sensor = "received_msg_sensor"
 
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(heltec_wifi_lora),    
     cv.Required(CONF_heltec_wifi_lora_NAME): cv.string,
 
-    cv.Optional(received_msg): cv.use_id(text_sensor.TextSensor),
+    cv.Optional(received_msg_sensor): cv.use_id(text_sensor.TextSensor),
     cv.Optional(CONF_ID): cv.declare_id(heltec_wifi_lora),
     cv.Optional(CONF_heltec_wifi_lora_NAME): cv.string,
 
