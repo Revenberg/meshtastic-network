@@ -8,8 +8,8 @@ esphome:
             digitalWrite(36, LOW);
             delay(100);
   includes:
-    - my_lorawan_component.h
-    - lorawan_secrets.h
+    - components/my_lorawan_component.h
+    - components/lorawan_secrets.h
   libraries:
     - "SPI"
     - "Ticker"
