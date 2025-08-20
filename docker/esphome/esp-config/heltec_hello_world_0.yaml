@@ -7,9 +7,6 @@ esphome:
             pinMode(36, OUTPUT);
             digitalWrite(36, LOW);
             delay(100);
-  includes:
-    - components/my_lorawan_component.h
-    - components/lorawan_secrets.h
   libraries:
     - "SPI"
     - "Ticker"
@@ -109,6 +106,7 @@ lorawan_sx126x:
 # radio_txen:     -1  # LoRa Antenna TX Enable, on some boards.
 # radio_rxen:     -1  # LoRa Antenna RX Enable, on some boards.
 
+  authtype: basic
   region: AU915
 #     # AS923
 #     # AU915
@@ -123,12 +121,12 @@ lorawan_sx126x:
 #     # AS923_3
 #     # AS923_4
 #     # RU864
-  subchannel: 2
-  device_type: CLASS_A
+#  subchannel: 2
+#  device_type: CLASS_A
 #     # CLASS_B
 #     # CLASS_C
 
-  authentication: OTAA
+#  authentication: OTAA
     # OTAA - Over the Air
     # ABP - Activation by Personalization
 
