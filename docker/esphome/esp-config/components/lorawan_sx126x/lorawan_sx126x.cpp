@@ -69,7 +69,7 @@ namespace esphome {
             hwConfig.USE_DIO3_TCXO       = true;
             hwConfig.USE_DIO3_ANT_SWITCH = false;
 
-            // uint8_t deviceId[8];
+            uint8_t deviceId[8];
             BoardGetUniqueId(deviceId);
             ESP_LOGD(TAG, "BoardId: %02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X",
                      deviceId[0],

@@ -1,5 +1,5 @@
 esphome:
-  name: heltechelloworld_0
+  name: heltechelloworld-0
   on_boot:
     - priority: 1000
       then:
