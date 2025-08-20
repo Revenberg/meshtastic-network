@@ -1,0 +1,51 @@
+esphome:
+  name: heltec_hello_world
+  platform: ESP32
+  board: heltec_wifi_lora_32_v3
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+# Enable OTA updates
+ota:
+
+# WiFi configuration
+#wifi:
+#  ssid: "revenberg"
+#  password: "your-PASSWORD"
+
+  # Static IP configuration (optional)
+#  manual_ip:
+#    static_ip: 192.168.1.100
+#    gateway: 192.168.1.1
+#    subnet: 255.255.255.0
+
+  # Enable fallback hotspot (captive portal) in case WiFi connection fails
+ # ap:
+ #   ssid: "Heltec Hello World"
+ #   password: "hello"
+
+#captive_portal:
+
+# I2C configuration for the OLED display
+i2c:
+  sda: 4
+  scl: 15
+  scan: true
+
+# SSD1306 OLED display configuration
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x64"
+    address: 0x3C
+    lambda: |-
+      it.print(0, 0, id(font), "Hello World!");
+
+# Font configuration
+font:
+  - file: "fonts/arial.ttf"
+    id: font
+    size: 16

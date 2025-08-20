@@ -1,7 +1,6 @@
 esphome:
   name: heltec-node-1
   libraries:
-    - "SPI"
     - "WIFI"
     - "Ticker"
     - "SX126x-Arduino"
@@ -69,3 +68,4 @@ display:
 heltec_wifi_lora:
   name: "Node 1"
   received_msg_sensor: received_msg
+  
