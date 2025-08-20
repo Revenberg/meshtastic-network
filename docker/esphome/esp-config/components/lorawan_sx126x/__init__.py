@@ -27,7 +27,7 @@ RADIO_RXEN     = -1  # LORA ANTENNA RX ENABLE
 CONF_LORAWAN_DEVICE_EUI        = ""
 
 CONFIG_SCHEMA = cv.Schema({
-    cv.GenerateID(): cv.declare_id(LoraSX126X),
+    cv.GenerateID(): cv.declare_id(LoRaWANSX126X),
     cv.Optional('name'): cv.string,
 
     cv.Optional('pin_lora_reset', default=PIN_LORA_RESET): cv.int_,
