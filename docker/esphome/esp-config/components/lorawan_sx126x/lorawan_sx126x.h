@@ -40,9 +40,9 @@ namespace esphome {
             void set_lorawan_device_eui (std::string lorawan_device_id)  {
                 this->lorawan_device_eui_ = lorawan_device_id; }
             void set_lorawan_app_eui (std::string lorawan_app_eui) {
-                this->lorawan_app_eui = lorawan_app_eui; }
+                this->lorawan_app_eui_ = lorawan_app_eui; }
             void set_lorawan_app_key (std::string lorawan_app_key) {
-                this->lorawan_app_key = lorawan_app_key; }
+                this->lorawan_app_key_ = lorawan_app_key; }
 
             void     packets_rx_zero(void) { this->lora_packets_rx_ = 0; }
             void     packets_rx_incrument(void) { this->lora_packets_rx_++; }
@@ -74,6 +74,18 @@ namespace esphome {
             // Statistics
             uint16_t lora_packets_rx_;
             uint16_t lora_packets_tx_;
+            uint8_t tx_output_power_;
+
+            uint8_t rx_timeout_value_;
+            uint8_t tx_timeout_value_;
+            uint32_t rf_frequency_;
+            uint8_t lora_bandwidth_;
+            uint8_t lora_spreading_factor_;
+            uint8_t lora_codingrate_;
+            uint16_t lora_preamble_length_;
+            uint16_t lora_symbol_timeout_;
+            bool lora_fix_length_payload_on_;
+            bool lora_iq_inversion_on_;
 
         }; // class LoraSX126X
 
