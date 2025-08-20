@@ -17,6 +17,12 @@ esphome:
     - "ArduinoJson"
     - "CayenneLPP"
 
+external_components:
+  - source:
+      type: local
+      path: components 
+    components: ["lorawan_sx126x"]
+
 esp32:
   board: heltec_wifi_lora_32_V3
   framework:
