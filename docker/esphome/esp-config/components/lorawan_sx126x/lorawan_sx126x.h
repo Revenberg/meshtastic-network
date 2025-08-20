@@ -41,7 +41,7 @@ namespace esphome {
                 this->lorawan_device_eui_ = lorawan_device_id; }
             void set_lorawan_app_eui (std::string lorawan_app_eui) {
                 this->lorawan_app_eui = lorawan_app_eui; }
-            void set_lorawan_app_key (std:string lorawan_app_key) {
+            void set_lorawan_app_key (std::string lorawan_app_key) {
                 this->lorawan_app_key = lorawan_app_key; }
 
             void     packets_rx_zero(void) { this->lora_packets_rx_ = 0; }
