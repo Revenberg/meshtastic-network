@@ -1,5 +1,21 @@
 esphome:
-  name: heltecHelloWorld
+  name: heltechelloworld_1
+  on_boot:
+    - priority: 1000
+      then:
+        - lambda: |-
+            pinMode(36, OUTPUT);
+            digitalWrite(36, LOW);
+            delay(100);
+  includes:
+    - my_lorawan_component.h
+    - lorawan_secrets.h
+  libraries:
+    - "SPI"
+    - "Ticker"
+    - "SX126x-Arduino"
+    - "ArduinoJson"
+    - "CayenneLPP"
 
 esp32:
   board: heltec_wifi_lora_32_V3
@@ -8,7 +24,8 @@ esp32:
 
 # Enable logging
 logger:
-
+  level: VERBOSE
+  
 # Enable Home Assistant API
 api:
 
@@ -30,19 +47,31 @@ wifi:
 
 #captive_portal:
 
+web_server:
+  port: 80
+
 # I2C configuration for the OLED display
+spi:
+  clk_pin: GPIO9
+  mosi_pin: GPIO10
+  miso_pin: GPIO11
+
 i2c:
-  sda: 4
-  scl: 15
-  scan: true
+  - id: bus_a
+    sda: 17
+    scl: 18
+    scan: true
 
 # SSD1306 OLED display configuration
 display:
   - platform: ssd1306_i2c
     model: "SSD1306 128x64"
+    reset_pin: 21
+    i2c_id: bus_a
     address: 0x3C
     lambda: |-
-      it.print(0, 0, id(roboto_10), "Hello World!");
+      it.print(0, 0, id(roboto_16), "Hello World!");
+      it.strftime(64, 32, id(sysfont), TextAlign::CENTER, "%H:%M", id(esptime).now());
 
 ## Fonts for OLED display
 font:
