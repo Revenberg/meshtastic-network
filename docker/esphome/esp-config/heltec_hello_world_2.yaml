@@ -1,5 +1,5 @@
 esphome:
-  name: heltechelloworld_1
+  name: heltechelloworld_2
   on_boot:
     - priority: 1000
       then:
@@ -24,7 +24,7 @@ esp32:
 
 # Enable logging
 logger:
-  level: VERBOSE
+  level: DEBUG
   
 # WiFi configuration
 wifi:
@@ -76,7 +76,7 @@ display:
     i2c_id: bus_a
     address: 0x3C
     lambda: |-
-      it.print(0, 0, id(roboto_16), "Hello World!");
+      it.print(0, 0, id(roboto_16), "Hello World 2!");
       it.strftime(64, 32, id(roboto_16), TextAlign::CENTER, "%H:%M", id(esptime).now());
 
 ## Fonts for OLED display
@@ -88,3 +88,8 @@ font:
     id: roboto_10
     size: 10
 
+sx1262_lorawan:
+  id: lorawan_1
+  device_eui: "{0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}"
+  app_eui:    "{0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}"
+  app_key:    "{0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}"
