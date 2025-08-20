@@ -26,9 +26,6 @@ esp32:
 logger:
   level: VERBOSE
   
-# Enable Home Assistant API
-api:
-
 # WiFi configuration
 wifi:
   ssid: !secret wifi_ssid
@@ -49,6 +46,15 @@ wifi:
 
 web_server:
   port: 80
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret api_encryption_key
+
+time:
+  - platform: homeassistant
+    id: esptime
 
 # I2C configuration for the OLED display
 spi:
@@ -71,7 +77,7 @@ display:
     address: 0x3C
     lambda: |-
       it.print(0, 0, id(roboto_16), "Hello World!");
-      it.strftime(64, 32, id(sysfont), TextAlign::CENTER, "%H:%M", id(esptime).now());
+      it.strftime(64, 32, id(roboto_16), TextAlign::CENTER, "%H:%M", id(esptime).now());
 
 ## Fonts for OLED display
 font:
