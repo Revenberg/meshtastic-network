@@ -103,10 +103,23 @@ namespace esphome {
             }
 
             // Check if the component is initialized
-            bool is_initialized() const override {
+            bool is_initialized() const {
                 // Add logic to verify initialization status
                 // For now, assume the component is always initialized
                 return this->is_setup();
+            }
+
+        private:
+            bool setup_complete_ = false; // Flag to track setup completion
+
+        public:
+            void setup() override {
+                Component::setup();
+                this->setup_complete_ = true; // Mark setup as complete
+            }
+
+            bool is_setup() const {
+                return this->setup_complete_; // Return setup status
             }
         }; // class LoraSX126Xrssi
 
@@ -123,7 +136,7 @@ namespace esphome {
             }
 
             // Check if the component is initialized
-            bool is_initialized() const override {
+            bool is_initialized() const {
                 // Verify if the component setup is complete
                 if (!this->is_setup()) {
                     ESP_LOGW("LoraSX126Xpkt", "Component setup is incomplete.");
@@ -134,6 +147,18 @@ namespace esphome {
 
                 ESP_LOGD("LoraSX126Xpkt", "Component is initialized.");
                 return true;
+            }
+        private:
+            bool setup_complete_ = false; // Flag to track setup completion
+
+        public:
+            void setup() override {
+                Component::setup();
+                this->setup_complete_ = true; // Mark setup as complete
+            }
+
+            bool is_setup() const {
+                return this->setup_complete_; // Return setup status
             }
         }; // class LoraSX126Xpkt
 
