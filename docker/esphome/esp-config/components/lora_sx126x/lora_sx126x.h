@@ -101,6 +101,13 @@ namespace esphome {
                 }
                 this->publish_state(rssi);
             }
+
+            // Check if the component is initialized
+            bool is_initialized() const override {
+                // Add logic to verify initialization status
+                // For now, assume the component is always initialized
+                return this->is_setup();
+            }
         }; // class LoraSX126Xrssi
 
         // This class handles packet data as text.
@@ -113,6 +120,20 @@ namespace esphome {
                     return;
                 }
                 this->publish_state(val);
+            }
+
+            // Check if the component is initialized
+            bool is_initialized() const override {
+                // Verify if the component setup is complete
+                if (!this->is_setup()) {
+                    ESP_LOGW("LoraSX126Xpkt", "Component setup is incomplete.");
+                    return false;
+                }
+
+                // Additional checks can be added here if needed
+
+                ESP_LOGD("LoraSX126Xpkt", "Component is initialized.");
+                return true;
             }
         }; // class LoraSX126Xpkt
 
