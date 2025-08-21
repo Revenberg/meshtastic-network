@@ -93,7 +93,7 @@ namespace esphome {
         // This class handles RSSI (Received Signal Strength Indicator) data.
         class LoraSX126Xrssi : public sensor::Sensor, public Component {
         public:
-            void setup() override;
+            void setup();
             void publish (float_t rssi) {
                 if (!this->is_initialized()) {
                     ESP_LOGW("LoraSX126Xrssi", "Component not initialized. Cannot publish RSSI.");
@@ -113,7 +113,7 @@ namespace esphome {
             bool setup_complete_ = false; // Flag to track setup completion
 
         public:
-            void setup() override {
+            void setup() {
                 Component::setup();
                 this->setup_complete_ = true; // Mark setup as complete
             }
@@ -126,7 +126,7 @@ namespace esphome {
         // This class handles packet data as text.
         class LoraSX126Xpkt : public text_sensor::TextSensor, public Component {
         public:
-            void setup() override {
+            void setup() {
                 Component::setup();
                 this->setup_complete_ = true; // Mark setup as complete
             }
@@ -156,7 +156,7 @@ namespace esphome {
             bool setup_complete_ = false; // Flag to track setup completion
 
         public:
-            void setup() override {
+            void setup() {
                 Component::setup();
                 this->setup_complete_ = true; // Mark setup as complete
             }
