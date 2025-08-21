@@ -48,7 +48,6 @@ namespace esphome {
         //////////////////////////////////////////////////////////////////////
         // ESPHome Methods
         void LoraSX126X::setup() {
-            int result;
             // The following is required to access object from callbacks
             radiolib = this;
 
@@ -125,7 +124,7 @@ namespace esphome {
 
         void LoraSX126X::loop() {
             // This will be called very often after setup time.
-            LoraSX126X::dump_config();
+            
         }
 
         void LoraSX126X::dump_config() {

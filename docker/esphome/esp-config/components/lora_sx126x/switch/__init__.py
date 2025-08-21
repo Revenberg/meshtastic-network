@@ -1,3 +1,7 @@
+# Custom ESPHome switch component for LoRa SX126X
+# This component allows dynamic control and state publishing for the switch.
+
+# Import necessary modules
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome import automation
@@ -7,7 +11,6 @@ from esphome.const import (
     CONF_ID,
     CONF_LAMBDA,
     CONF_OPTIMISTIC,
-    CONF_RESTORE_STATE,
     CONF_STATE,
     CONF_TURN_OFF_ACTION,
     CONF_TURN_ON_ACTION,
@@ -16,6 +19,9 @@ from esphome.const import (
 from .. import lora_sx126x_ns
 
 LoRaSX126XSwitch = lora_sx126x_ns.class_("LoRaSX126XSwitch", switch.Switch, cg.Component)
+
+# Validate configuration
+# Ensure optimistic mode or actions are defined
 
 def validate(config):
     if (
@@ -43,16 +49,20 @@ CONFIG_SCHEMA = cv.All(
             cv.Optional(CONF_TURN_ON_ACTION): automation.validate_automation(
                 single=True
             ),
-            cv.Optional(CONF_RESTORE_STATE): cv.invalid(
-                "The restore_state option has been removed in 2023.7.0. Use the restore_mode option instead"
-            ),
         }
     )
     .extend(cv.COMPONENT_SCHEMA),
     validate,
 )
 
+# Helper function to handle automation
+async def handle_automation(var, trigger, config_key, config):
+    if config_key in config:
+        await automation.build_automation(
+            getattr(var, trigger)(), [], config[config_key]
+        )
 
+# Generate code for the switch
 async def to_code(config):
     var = await switch.new_switch(config)
     await cg.register_component(var, config)
@@ -62,18 +72,15 @@ async def to_code(config):
             config[CONF_LAMBDA], [], return_type=cg.optional.template(bool)
         )
         cg.add(var.set_state_lambda(template_))
-    if CONF_TURN_OFF_ACTION in config:
-        await automation.build_automation(
-            var.get_turn_off_trigger(), [], config[CONF_TURN_OFF_ACTION]
-        )
-    if CONF_TURN_ON_ACTION in config:
-        await automation.build_automation(
-            var.get_turn_on_trigger(), [], config[CONF_TURN_ON_ACTION]
-        )
+
+    # Use helper function for automation
+    await handle_automation(var, "get_turn_off_trigger", CONF_TURN_OFF_ACTION, config)
+    await handle_automation(var, "get_turn_on_trigger", CONF_TURN_ON_ACTION, config)
+
     cg.add(var.set_optimistic(config[CONF_OPTIMISTIC]))
     cg.add(var.set_assumed_state(config[CONF_ASSUMED_STATE]))
 
-
+# Register custom automation action
 @automation.register_action(
     "switch.lora_sx126x.publish",
     switch.SwitchPublishAction,

@@ -8,28 +8,41 @@ namespace esphome {
 
         LoRaSX126XSwitch::LoRaSX126XSwitch() : turn_on_trigger_(new Trigger<>()), turn_off_trigger_(new Trigger<>()) {}
 
+        // This function is called in the main loop to evaluate the state lambda function
         void LoRaSX126XSwitch::loop() {
-            if (!this->f_.has_value())
+            // Check if the state lambda function is set
+            if (!this->f_.has_value()) {
+                ESP_LOGW(TAG, "State lambda function is not set.");
                 return;
+            }
+
+            // Evaluate the lambda function and publish the state
             auto s = (*this->f_)();
-            if (!s.has_value())
+            if (!s.has_value()) {
+                ESP_LOGW(TAG, "State lambda function returned no value.");
                 return;
+            }
 
             this->publish_state(*s);
         }
-        void LoRaSX126XSwitch::write_state(bool state) {
+
+        // Refactored logic for handling triggers
+        void LoRaSX126XSwitch::handle_trigger(bool state) {
             if (this->prev_trigger_ != nullptr) {
                 this->prev_trigger_->stop_action();
             }
-
-            if (state) {
+            if (state && this->turn_on_trigger_ != nullptr) {
                 this->prev_trigger_ = this->turn_on_trigger_;
                 this->turn_on_trigger_->trigger();
-            } else {
+            } else if (this->turn_off_trigger_ != nullptr) {
                 this->prev_trigger_ = this->turn_off_trigger_;
                 this->turn_off_trigger_->trigger();
             }
+        }
 
+        // Updated write_state function to use handle_trigger
+        void LoRaSX126XSwitch::write_state(bool state) {
+            this->handle_trigger(state);
             if (this->optimistic_)
                 this->publish_state(state);
         }

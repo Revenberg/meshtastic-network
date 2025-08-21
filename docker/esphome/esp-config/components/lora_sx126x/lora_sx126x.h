@@ -10,6 +10,8 @@
 namespace esphome {
     namespace lora_sx126x {
 
+        // This class represents the main LoRa SX126X component.
+        // It provides methods to configure LoRa parameters and track packet statistics.
         class LoraSX126X : public sensor::Sensor, public Component {
         public:
             void setup() override;
@@ -88,16 +90,30 @@ namespace esphome {
 
         }; // class LoraSX126X
 
+        // This class handles RSSI (Received Signal Strength Indicator) data.
         class LoraSX126Xrssi : public sensor::Sensor, public Component {
         public:
             void setup() override;
-            void publsh (float_t rssi) { this->publish_state(rssi); }
+            void publish (float_t rssi) {
+                if (!this->is_initialized()) {
+                    ESP_LOGW("LoraSX126Xrssi", "Component not initialized. Cannot publish RSSI.");
+                    return;
+                }
+                this->publish_state(rssi);
+            }
         }; // class LoraSX126Xrssi
 
+        // This class handles packet data as text.
         class LoraSX126Xpkt : public text_sensor::TextSensor, public Component {
         public:
             void setup() override;
-            void publish (char * val) { this->publish_state(val); }
+            void publish (char * val) {
+                if (!this->is_initialized()) {
+                    ESP_LOGW("LoraSX126Xpkt", "Component not initialized. Cannot publish packet data.");
+                    return;
+                }
+                this->publish_state(val);
+            }
         }; // class LoraSX126Xpkt
 
 
