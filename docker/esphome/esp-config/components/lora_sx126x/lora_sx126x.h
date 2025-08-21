@@ -14,7 +14,7 @@ namespace esphome {
         // It provides methods to configure LoRa parameters and track packet statistics.
         class LoraSX126X : public sensor::Sensor, public Component {
         public:
-            void setup() ;
+            void setup() override;
             void loop() ;
             void dump_config() ;
 
@@ -126,7 +126,7 @@ namespace esphome {
         // This class handles packet data as text.
         class LoraSX126Xpkt : public text_sensor::TextSensor, public Component {
         public:
-            void setup()  {
+            void setup() override {
                 Component::setup();
                 this->setup_complete_ = true; // Mark setup as complete
             }
