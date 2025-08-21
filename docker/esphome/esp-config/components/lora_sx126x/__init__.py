@@ -24,7 +24,7 @@ RADIO_TXEN     = -1  # LORA ANTENNA TX ENABLE
 RADIO_RXEN     = -1  # LORA ANTENNA RX ENABLE
 
 # LoRa Radio Parameters
-CONF_RF_FREQUENCY          = 915000000  # Hz
+CONF_RF_FREQUENCY          = 868000000  # Hz
 CONF_TX_OUTPUT_POWER       = 22         # dBm
 CONF_LORA_BANDWIDTH        = 0	        # [0: 125 kHz, 1: 250 kHz, 2: 500 kHz, 3: Reserved]
 CONF_LORA_SPREADING_FACTOR = 7          # [SF7..SF12]

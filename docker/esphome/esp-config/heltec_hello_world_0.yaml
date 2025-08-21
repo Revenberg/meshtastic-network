@@ -18,7 +18,7 @@ external_components:
   - source:
       type: local
       path: components 
-    components: ["lorawan_sx126x"]
+    components: ["lora_sx126x"]
 
 esp32:
   board: heltec_wifi_lora_32_V3
@@ -27,6 +27,7 @@ esp32:
 
 # Enable logging
 logger:
+  hardware_uart: "UART0"  # Heltec V3 boards
   level: DEBUG
   
 # WiFi configuration
@@ -79,7 +80,7 @@ display:
     i2c_id: bus_a
     address: 0x3C
     lambda: |-
-      it.print(0, 0, id(roboto_16), "Hello World 0!");
+      it.print(0, 0, id(roboto_16), "Hello World 1!");
       it.strftime(64, 32, id(roboto_16), TextAlign::CENTER, "%H:%M", id(esptime).now());
 
 ## Fonts for OLED display
@@ -91,57 +92,63 @@ font:
     id: roboto_10
     size: 10
 
-# LoRaWAN Specific Oprions
-# Setting these will enable the LoRaWAN radio mode
-lorawan_sx126x:
+lora_sx126x:
+  rf_frequency: 915000000          # Manditory for user to set
 
-# # Interface to radio chip
-# pin_lora_reset: 12  # LoRa Reset
-# pin-lora_dio_1: 14  # LoRa DIO_1
-# pin_lora_busy:  13  # LoRa SPI Busy
-# pin_lora_nss:    8  # LoRa SPI CS (Chip Select)
-# pin_lora_sclk:   9  # LoRa SPI SCLK
-# pin_lora_miso:  11  # LoRa SPI MISO (Master In, Slave Out)
-# pin_lora_mosi:  10  # LoRa SPI MOSI (Master Out, Slave In)
-# radio_txen:     -1  # LoRa Antenna TX Enable, on some boards.
-# radio_rxen:     -1  # LoRa Antenna RX Enable, on some boards.
+sensor:
+  - platform: lora_sx126x
+    id: lorarssi
+    name: lorarssi                 # Required for publishing into API and HA 
 
-  authtype: basic
-  region: AU915
-#     # AS923
-#     # AU915
-#     # CN470
-#     # CN779
-#     # EU433
-#     # EU868
-#     # IN865
-#     # KR920
-#     # US915
-#     # AS923_2
-#     # AS923_3
-#     # AS923_4
-#     # RU864
-#  subchannel: 2
-#  device_type: CLASS_A
-#     # CLASS_B
-#     # CLASS_C
+#  - platform: lora_sx126x
+#    id: lorarssi
+#    name: lorarssi                 # Required for publishing into API and HA 
 
-#  authentication: OTAA
-    # OTAA - Over the Air
-    # ABP - Activation by Personalization
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: ESP IP Address
+  - platform: version
+    name: "ESPHome Version"
+  - platform: template
+    name: "Template Text Sensor"
+    lambda: |-
+      return {"Hello World 0"};
+    update_interval: 60s
+  - platform: lora_sx126x
+    id: packet_in
+    name: packet_in
+  
+binary_sensor:
+  - platform: gpio
+    pin: 5
+    id: trigger
+    name: "Trigger (In)"
+    on_press:
+      then:
+        - switch.turn_on: monitor_switch    
+    on_release:
+      then:
+        - switch.turn_off: monitor_switch
 
-# device_eui: !secret lorawan_device_eui   # 8 bytes
-    # The Device EUI is unique to the device, It can be set here, or will be set
-    # using the WiFi MAC address, If it is set automatically, then this code
-    # won't need to be recompiled for every device.
+output:
+  - platform: gpio
+    pin: 6
+    id: monitor
+  - platform: gpio
+    pin: 35
+    id: monitor_led
     
-  app_eui: !secret lorawan_join_eui    # 8 bytes     
-    # Also referred to as 'join_eui'
+switch:
+  - platform: output
+    id: monitor_switch
+    name: "Monitor Output (Out)"
+    output:
+#     monitor
+      monitor_led
 
-    # The following is used for Over The Air Authentication (OTAA)
-  app_key:  !secret lorawan_app_key   # 16 bytes
+button:
+  - platform: restart
+    name: "Restart"
 
-#   # The following is required for Activation By Personalization (ABP) - Untested
-#   nwks_key: "00000000000000000000000000000000"  # 16 bytes
-#   apps_key: "00000000000000000000000000000000"  # 16 bytes
-#   dev_addr: "00000000000000000000000000000000"  # 16 bytes
+  

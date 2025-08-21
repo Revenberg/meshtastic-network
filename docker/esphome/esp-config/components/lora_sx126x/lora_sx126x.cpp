@@ -125,6 +125,7 @@ namespace esphome {
 
         void LoraSX126X::loop() {
             // This will be called very often after setup time.
+            LoraSX126X::dump_config();
         }
 
         void LoraSX126X::dump_config() {
