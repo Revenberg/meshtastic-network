@@ -155,10 +155,5 @@ namespace esphome {
             ESP_LOGCONFIG(TAG, "");
         }
 
-        void LoraSX126Xrssi::setup() override {
-            // The following is required to access object from callbacks
-            radiolibrssi = this;
-        }
-
     }  // namespace lora_sx126x
 }  // namespace esphome
