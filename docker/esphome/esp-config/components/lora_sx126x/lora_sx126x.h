@@ -156,7 +156,7 @@ namespace esphome {
             bool setup_complete_ = false; // Flag to track setup completion
 
         public:
-            void setup() {
+            void setup() override {
                 Component::setup();
                 this->setup_complete_ = true; // Mark setup as complete
             }
