@@ -15,8 +15,8 @@ namespace esphome {
             LoRaSX126XSwitch(bool optimistic = false, bool assumed_state = false);
 
             // ESPHome lifecycle methods
-            void setup() override;
-            void dump_config() override;
+            void setup() ;
+            void dump_config() ;
 
             // Set a lambda function for dynamic state evaluation
             void set_state_lambda(std::function<optional<bool>()> &&f);
@@ -32,17 +32,17 @@ namespace esphome {
             void set_assumed_state(bool assumed_state);
 
             // Main loop function
-            void loop() override;
+            void loop() ;
 
             // Get setup priority
-            float get_setup_priority() const override;
+            float get_setup_priority() const ;
 
         protected:
             // Check if the switch has an assumed state
-            bool assumed_state() override;
+            bool assumed_state() ;
 
             // Write the state of the switch
-            void write_state(bool state) override;
+            void write_state(bool state) ;
 
             // Helper method to handle triggers
             void handle_trigger(bool state);
