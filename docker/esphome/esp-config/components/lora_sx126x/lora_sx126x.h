@@ -93,7 +93,7 @@ namespace esphome {
         // This class handles RSSI (Received Signal Strength Indicator) data.
         class LoraSX126Xrssi : public sensor::Sensor, public Component {
         public:
-            void setup() ;
+            void setup() override;
             void publish (float_t rssi) {
                 if (!this->is_initialized()) {
                     ESP_LOGW("LoraSX126Xrssi", "Component not initialized. Cannot publish RSSI.");
