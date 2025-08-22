@@ -4,7 +4,8 @@
 
 #include <SX126x-Arduino.h>
 #include <SPI.h>
-#include <string>
+#include <cstdio>
+#include <cstring>
 
 // Tag for log output.
 // The following is required to use log macros outside of the 'esphome' namespace.
@@ -14,13 +15,19 @@ static const char *TAG = "lora_sx126x";
 
 #define BUFFER_SIZE 64 // Define the payload size here
 
+#define GPIO5 5 // Input - High On, Low Off
+#define GPIO6 6 // Output - Monitor State
+
 namespace esphome {
     namespace lora_sx126x {
 
         hw_config hwConfig;
         static RadioEvents_t RadioEvents;
         char rxpacket[BUFFER_SIZE];
-        std::string mac; // Holds formatted board MAC/ID string
+        // Internal transmit buffer and state tracking (internal linkage)
+        static char txpacket[BUFFER_SIZE];
+        static int c_state = 0;
+        static int p_state = 0;
 
         // Object references
         LoraSX126X*     radiolib;
@@ -36,16 +43,21 @@ namespace esphome {
             Radio.Sleep();
             ESP_LOGD(TAG, "Received packet \"%s\" with rssi:%d length:%d",rxpacket,rssi,size);
 
-            radiolib->packets_rx_incrument();
-            ESP_LOGD(TAG, "Packet count: %d",radiolib->packets_rx());
+            if (radiolib) {
+                radiolib->packets_rx_incrument();
+                ESP_LOGD(TAG, "Packet count: %d", radiolib->packets_rx());
+                // Set Radio to receive next packet
+                Radio.Rx(radiolib->get_rx_timeout_value());
+            }
 
-            // Publish details to Sensor API
-            radiolibrssi->publish_state(1.0 * rssi);
-            radiolibpkt->publish_state(rxpacket);
-
-            // Set Radio to receive next packet
-            Radio.Rx(radiolib->get_rx_timeout_value());
-        }
+            // Publish details to Sensor API (check pointers)
+            if (radiolibrssi) {
+                radiolibrssi->publish_state(1.0 * rssi);
+            }
+            if (radiolibpkt) {
+                radiolibpkt->publish_state(rxpacket);
+            }
+         }
 
         //////////////////////////////////////////////////////////////////////
         // ESPHome Methods
@@ -54,6 +66,11 @@ namespace esphome {
             radiolib = this;
 
             ESP_LOGD(TAG, "LoRa SX126X Setup (SX1262)");
+
+            // Configure GPIOs used by this module
+            pinMode(GPIO5, INPUT_PULLUP);
+            pinMode(GPIO6, OUTPUT);
+            digitalWrite(GPIO6, LOW);
 
             // Define the HW configuration between MCU and SX126x
             hwConfig.CHIP_TYPE      = SX1262_CHIP;	    // Example uses an eByte E22 module with an SX1262
@@ -130,16 +147,61 @@ namespace esphome {
             if(currentMillis - previousMillis > interval) {
                 previousMillis = currentMillis;
                 ESP_LOGD(TAG, "Tick");
-                std::string mac = String::format("BoardId: %02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X",
-                     deviceId[0],
-                     deviceId[1],
-                     deviceId[2],
-                     deviceId[3],
-                     deviceId[4],
-                     deviceId[5],
-                     deviceId[6],
-                     deviceId[7]);
-                Radio.tx("Hello LoRa " + mac);
+                char mac_buf[96];
+                snprintf(mac_buf, sizeof(mac_buf),
+                         "BoardId: %02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X",
+                         deviceId[0], deviceId[1], deviceId[2], deviceId[3],
+                         deviceId[4], deviceId[5], deviceId[6], deviceId[7]);
+                // Prepare message
+                snprintf(txpacket, sizeof(txpacket), "Hello LoRa %s", mac_buf);
+                // Send using Radio.Send (raw bytes)
+                Radio.Send((uint8_t *)txpacket, strlen(txpacket));
+
+                int val = digitalRead(GPIO5);
+                //Serial.print("Pin Value: ");
+                //Serial.println(val);
+                if(val == 0){
+                    p_state = c_state;
+                    c_state = 1;
+                    digitalWrite(GPIO6,HIGH);
+                } else {
+                    p_state = c_state;
+                    c_state = 0;
+                    digitalWrite(GPIO6,LOW);
+                }
+
+                // If state has changes, repeat transmission 15 times.
+                if(p_state != c_state && c_state == 1 ){
+                    for(int i = 0; i<15; i++){
+                        ESP_LOGD(TAG,"Pin Value: %i", val);
+                        ESP_LOGD(TAG,"Sending packet: OFF");
+                        sprintf(txpacket,"%s", PKT_OFF);
+                        Radio.Send( (uint8_t *)txpacket, strlen(txpacket) ); //send the package out
+                    }
+                }
+                else if(p_state != c_state && c_state == 0){
+                    for(int i = 0; i<15; i++){
+                        ESP_LOGD(TAG, "Pin Value: %i", val);
+                        ESP_LOGD(TAG, "Sending packet: ON");
+                        sprintf(txpacket,"%s",PKT_ON);
+                        Radio.Send( (uint8_t *)txpacket, strlen(txpacket) ); //send the package out
+                    }
+                } else {
+                    if(c_state == 1){
+                        ESP_LOGD(TAG, "Pin Value: %d", val);
+                        ESP_LOGD(TAG, "Sending packet: OFF");
+                        sprintf(txpacket,"%s", PKT_OFF);
+                        Radio.Send( (uint8_t *)txpacket, strlen(txpacket) ); //send the package out
+
+                    }
+                    else if(c_state == 0){
+                        ESP_LOGD(TAG, "Pin Value: %d", val);
+                        ESP_LOGD(TAG, "Sending packet: ON");
+                        sprintf(txpacket,"%s", PKT_ON);
+                        Radio.Send( (uint8_t *)txpacket, strlen(txpacket) ); //send the package out
+                    }
+                }
+
             }
 
         }
