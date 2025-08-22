@@ -124,7 +124,21 @@ namespace esphome {
 
         void LoraSX126X::loop() {
             // This will be called very often after setup time.
-            
+            unsigned long currentMillis = millis();
+            if(currentMillis - previousMillis > interval) {
+                previousMillis = currentMillis;
+                ESP_LOGD(TAG, "Tick");
+                Radio.tx("Hello LoRa" + String::format("BoardId: %02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X",
+                     deviceId[0],
+                     deviceId[1],
+                     deviceId[2],
+                     deviceId[3],
+                     deviceId[4],
+                     deviceId[5],
+                     deviceId[6],
+                     deviceId[7]));
+            }
+
         }
 
         void LoraSX126X::dump_config() {
