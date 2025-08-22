@@ -1,0 +1,49 @@
+esphome:
+  name: "lora-receiver"
+  includes:
+  #  - my_lora_component.h
+    - components/lora/receiver.h
+    - components/lora/esphome_lora_version.h  
+  libraries:
+    - "SPI"
+    - "Ticker"
+    - "SX126x-Arduino"
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+#wifi:
+#  networks:
+#  - ssid: wifi_network
+#    password: PASSWORD
+    
+#ota:
+#  password: OTA_PASSWORD
+
+# Enable Home Assistant API
+#api:
+#  encryption:
+#    key: API_ENCRYPTION_KEY
+
+#spi:
+#  clk_pin: GPIO9
+#  mosi_pin: GPIO10
+#  miso_pin: GPIO11
+
+#i2c:
+#  - id: bus_a
+#    sda: 17
+#    scl: 18
+
+#############################################################################
+custom_component:
+  - lambda: |-
+      auto my_custom = new MyCustomComponent();
+      return {my_custom};
+    components:
+      - id: my_custom_id
