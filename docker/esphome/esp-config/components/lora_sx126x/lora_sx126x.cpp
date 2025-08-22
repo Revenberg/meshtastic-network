@@ -15,6 +15,9 @@ static const char *TAG = "lora_sx126x";
 
 #define BUFFER_SIZE 64 // Define the payload size here
 
+#define PKT_ON  "@+++"
+#define PKT_OFF "@---"
+
 #define GPIO5 5 // Input - High On, Low Off
 #define GPIO6 6 // Output - Monitor State
 
