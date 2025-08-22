@@ -4,6 +4,7 @@
 
 #include <SX126x-Arduino.h>
 #include <SPI.h>
+#include <string>
 
 // Tag for log output.
 // The following is required to use log macros outside of the 'esphome' namespace.
@@ -19,6 +20,7 @@ namespace esphome {
         hw_config hwConfig;
         static RadioEvents_t RadioEvents;
         char rxpacket[BUFFER_SIZE];
+        std::string mac; // Holds formatted board MAC/ID string
 
         // Object references
         LoraSX126X*     radiolib;
@@ -128,7 +130,7 @@ namespace esphome {
             if(currentMillis - previousMillis > interval) {
                 previousMillis = currentMillis;
                 ESP_LOGD(TAG, "Tick");
-                Radio.tx("Hello LoRa" + String::format("BoardId: %02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X",
+                std::string mac = String::format("BoardId: %02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X",
                      deviceId[0],
                      deviceId[1],
                      deviceId[2],
@@ -136,7 +138,8 @@ namespace esphome {
                      deviceId[4],
                      deviceId[5],
                      deviceId[6],
-                     deviceId[7]));
+                     deviceId[7]);
+                Radio.tx("Hello LoRa " + mac);
             }
 
         }
