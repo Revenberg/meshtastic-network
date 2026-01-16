@@ -1,128 +1,336 @@
-# ESPHome configuration for Heltec WiFi LoRa 32 V3 node
-# Provides web interface for number input, sends value via LoRa, displays status on OLED
-# Maintainer: Revenberg / meshtastic-network
+substitutions:
+  device_name: waveshare-di8-do8
+  device_comment: "WaveShare ESP32-S3-POE-ETH-8DI-8DO Device"
+  friendly_name: "WaveShare DI8-DO8"
+
 esphome:
-  name: "heltec-wifi-lora-32-v3-node-1"
-  includes:
-    - components/web_lora_component/web_lora_component.h
-
-## Board and framework
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+  min_version: 2025.5.0
+  comment: ${device_comment}
+  name_add_mac_suffix: false
+  on_boot:
+    then:
+      - pcf85063.read_time:
+          id: pcf85063_time
+# ==========================================================
+# Board Configuration
+# ==========================================================
+# Module is ESP32-S3-WROOM-1U-N16R8 (16MB flash, 8MB PSRAM)
 esp32:
-  board: esp32-s3-devkitc-1
+  board: esp32s3box
+  flash_size: 16MB
   framework:
-    type: arduino
-    # version: 2.0.9
-    # platform_version: 6.3.0
+    type: esp-idf
 
-##############################################################################
-#external_components:
-#  - source:
-#    path: "../esphome"
-#############################################################################
+psram:
+  mode: octal
+  speed: 80MHz
 
-## Enable logging for debugging
+# ==========================================================
+# Core Configuration
+# ==========================================================
 logger:
-  hardware_uart: "UART0"
+  baud_rate: 0 #Change if serial logging
+  level: WARN
 
-## WiFi configuration (Access Point only)
-wifi:
-  ap:
-    ssid: "meshtastic-node"
-    password: "meshpassword"
-  # No fallback, no scanning for networks
-
-## OTA (Over-the-Air) update support
-ota:
-  password: "8a64d4b2cc48d7fe3a6b2f0a28d368d3"
-  platform: esphome
-
-## Enable Home Assistant API (optional)
 api:
+  port: 6053
+  
+ota:
+  - platform: esphome
 
-## I2C bus for OLED display
-i2c:
-  - id: bus_a
-    sda: 18
-    scl: 17
-    scan: true
+#mqtt:
+#  broker: 192.168.1.51        # IP van je MQTT-broker (vervang dit)
+#  port: 1883                  # standaard MQTT-poort
+#  username: esphome           # optioneel
+#  password: esphome           # optioneel
+#  client_id: waveshare        # unieke naam per ESP
+#  topic_prefix: waveshare     # basis topicnaam voor sensoren
+#  discovery: false            # Homey heeft geen HA discovery nodig
 
+# ==========================================================
+# Network Configuration
+# ==========================================================
+ # Wi-FI or Ethernet can be enabled, not both concurrently.
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
 
+  # Enable AP when WiFi connection fails
+  ap:
+    ssid: "${friendly_name} AP"
+    password: "12345678"
 
-## Web server for local web interface
+captive_portal:
+
+## ethernet:
+##   type: W5500
+##   clk_pin: GPIO15
+##   mosi_pin: GPIO13
+##   miso_pin: GPIO14
+##   cs_pin: GPIO16
+##   interrupt_pin: GPIO12
+##   reset_pin: GPIO39  
+
 web_server:
-  local: true
+  port: 80
+    
+## # Bluetooth Tracker
+## esp32_ble_tracker:
 
-## Number input for web interface (sends value via LoRa)
-number:
-  - platform: template
-    name: "Send Number"
-    id: send_number
-    optimistic: true
-    min_value: 0
-    max_value: 999999
-    step: 1
-    mode: box
-    set_action:
-      - lambda: |-
-          global_web_lora_component->send_number(x);
+# ==========================================================
+# Hardware Buses
+# ==========================================================
+# I2C
+i2c:
+  sda: GPIO42
+  scl: GPIO41
+  frequency: 100kHz
+  id: i2cbus
+  scan: false
 
+# 8-bit expander that drives DO1..DO8
+pca9554:
+  - id: tca9554_hub
+    address: 0x20
 
-## Use external component for LoRa send logic (C++ LoRa driver)
-external_components:
-  - source:
-      type: local
-      path: /config/my_components
+### RS485
+##uart:
+##  - id: modbus_uart
+##    tx_pin: GPIO17
+##    rx_pin: GPIO18
+##    baud_rate: 9600
+##    stop_bits: 1
+##    data_bits: 8
+##    parity: NONE
 
+### CANbus
+##canbus:
+##  - platform: esp32_can
+##    tx_pin: GPIO2
+##    rx_pin: GPIO3
+##    can_id: 4
+##    bit_rate: 125kbps
 
-## Globals for display and state tracking
-globals:
-  - id: last_sent_number
-    type: int
-    restore_value: no
-    initial_value: '0'
-  - id: muon_cnt
-    type: int
-    restore_value: no
-    initial_value: '0'
-  - id: muon_event_rate
-    type: float
-    restore_value: no
-    initial_value: '0.0'
-  - id: background_cnt
-    type: int
-    restore_value: no
-    initial_value: '0'
-  - id: background_event_rate
-    type: float
-    restore_value: no
-    initial_value: '0.0'
+# ==========================================================
+# Accessories
+# ==========================================================
+# Real-time Clock
+time:
+  - platform: homeassistant
+    id: ha_time
+    on_time_sync:
+      then:
+        # Update the RTC when the synchronization was successful
+        - pcf85063.write_time:
+  - platform: pcf85063
+    id: pcf85063_time
 
+# Buzzer
+output:
+  - platform: ledc
+    id: buzzer
+    pin:
+      number: GPIO46
+      ignore_strapping_warning: true
 
+rtttl:
+  id: rtttl_buzzer
+  output: buzzer
+  gain: 30%
 
-## Fonts for OLED display
-font:
-# gfonts://family[@weight]
-#  - file: "gfonts://Roboto+Mono"
-  - file: "gfonts://Nova+Mono"
-    id: roboto_16
-    size: 16
-  - file: "gfonts://Roboto"
-    id: roboto_10
-    size: 10
+# RGB LED
+light:
+  - platform: esp32_rmt_led_strip
+    id: rgb_led
+    name: "RGB LED"
+    chipset: WS2812
+    rgb_order: RGB
+    pin: GPIO38
+    num_leds: 1
 
-## OLED display configuration
-display:
-  - platform: ssd1306_i2c
-    model: "SSD1306 128x64"
-    reset_pin: 21
-    i2c_id: bus_a
-    address: 0x3C
-    # auto_clear_enabled: false
-    lambda: |-
-      // Display muon and background event counts
-      it.print(0,  2, id(roboto_10), "Muons");
-      it.printf(0, 10, id(roboto_16), "%08d %5.1f", id(muon_cnt), id(muon_event_rate));
-      
-      it.print(0, 32, id(roboto_10), "Background");
-      it.printf(0, 40, id(roboto_16), "%08d %5.1f", id(background_cnt), id(background_event_rate));
+# ==========================================================
+# Sensors
+# ==========================================================
+sensor:
+  - platform: uptime
+    type: seconds
+    name: Uptime Sensor
 
+binary_sensor:
+  - platform: gpio
+    name: "Boot Button"
+    pin:
+      number: GPIO0
+      ignore_strapping_warning: true
+      mode:
+        input: true
+      inverted: true
+    disabled_by_default: true
+
+# --- Digital Inputs -----------------------------------------
+  - platform: gpio
+    id: di1
+    name: "DI1"
+    pin:
+      number: GPIO4
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      - delayed_on_off: 10ms
+
+  - platform: gpio
+    id: di2
+    name: "DI2"
+    pin:
+      number: GPIO5
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      - delayed_on_off: 10ms
+
+  - platform: gpio
+    id: di3
+    name: "DI3"
+    pin:
+      number: GPIO6
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      - delayed_on_off: 10ms
+
+  - platform: gpio
+    id: di4
+    name: "DI4"
+    pin:
+      number: GPIO7
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      - delayed_on_off: 10ms
+
+  - platform: gpio
+    id: di5
+    name: "DI5"
+    pin:
+      number: GPIO8
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      - delayed_on_off: 10ms
+
+  - platform: gpio
+    id: di6
+    name: "DI6"
+    pin:
+      number: GPIO9
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      - delayed_on_off: 10ms
+
+  - platform: gpio
+    id: di7
+    name: "DI7"
+    pin:
+      number: GPIO10
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      - delayed_on_off: 10ms
+
+  - platform: gpio
+    id: di8
+    name: "DI8"
+    pin:
+      number: GPIO11
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      - delayed_on_off: 10ms
+
+# --- Digital Outputs ----------------------------------------
+switch:
+  - platform: restart
+    name: "Restart"
+  - platform: gpio
+    name: "DO1"
+    id: do1
+    pin:
+      pca9554: tca9554_hub
+      number: 0
+      mode:
+        output: true
+#    inverted: true
+
+  - platform: gpio
+    name: "DO2"
+    id: do2
+    pin:
+      pca9554: tca9554_hub
+      number: 1
+      mode:
+        output: true
+#    inverted: true
+
+  - platform: gpio
+    name: "DO3"
+    id: do3
+    pin:
+      pca9554: tca9554_hub
+      number: 2
+      mode:
+        output: true
+#    inverted: true
+
+  - platform: gpio
+    name: "DO4"
+    id: do4
+    pin:
+      pca9554: tca9554_hub
+      number: 3
+      mode:
+        output: true
+#    inverted: true
+
+  - platform: gpio
+    name: "DO5"
+    id: do5
+    pin:
+      pca9554: tca9554_hub
+      number: 4
+      mode:
+        output: true
+#    inverted: true
+
+  - platform: gpio
+    name: "DO6"
+    id: do6
+    pin:
+      pca9554: tca9554_hub
+      number: 5
+      mode:
+        output: true
+#    inverted: true
+
+  - platform: gpio
+    name: "DO7"
+    id: do7
+    pin:
+      pca9554: tca9554_hub
+      number: 6
+      mode:
+        output: true
+#    inverted: true
+
+  - platform: gpio
+    name: "DO8"
+    id: do8
+    pin:
+      pca9554: tca9554_hub
+      number: 7
+      mode:
+        output: true
+#    inverted: true
+    

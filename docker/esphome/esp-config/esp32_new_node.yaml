@@ -1,0 +1,157 @@
+substitutions:
+  device_name: dallas-12-sensors
+  friendly_name: "dallas-12-sensors"
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+web_server:
+  port: 80
+  
+logger:
+
+api:
+
+ota:
+  - platform: esphome
+    password: "ccc20712dac69608661191e93d851afc"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  
+  ap:
+    ssid: "${friendly_name} AP"
+    password: "12345678"
+
+captive_portal:
+
+# ========================
+# OneWire bussen
+# ========================
+one_wire:
+  - platform: gpio
+    id: ow_a
+    pin:
+      number: GPIO4
+      mode:
+        input: true
+        pullup: false
+  - platform: gpio
+    id: ow_b
+    pin:
+      number: GPIO14
+      mode:
+        input: true
+        pullup: false
+
+# ========================
+# Dallas Temperatuur Sensors (12x)
+# ========================
+sensor:
+  # -------- String A (GPIO4) --------
+  - platform: dallas_temp
+    one_wire_id: ow_a
+    address: 0x8a1cb85f1f64ff28
+    name: "Dallas (0x8a1cb85f1f64ff28) temperature"
+    accuracy_decimals: 1
+    update_interval: 30s
+  - platform: dallas_temp
+    one_wire_id: ow_a
+    address: 0xdd11be5f1f64ff28
+    name: "Dallas (0xdd11be5f1f64ff28) temperature"
+    accuracy_decimals: 1
+    update_interval: 30s
+  - platform: dallas_temp
+    one_wire_id: ow_a
+    address: 0x2857b95f1f64ff28
+    name: "Dallas (0x2857b95f1f64ff28) temperature"
+    accuracy_decimals: 1
+    update_interval: 30s
+  - platform: dallas_temp
+    one_wire_id: ow_a
+    address: 0x430ab55f1f64ff28
+    name: "Dallas (0x430ab55f1f64ff28) temperature"
+    accuracy_decimals: 1
+    update_interval: 30s
+  - platform: dallas_temp
+    one_wire_id: ow_a
+    address: 0xe47dbb5f1f64ff28
+    name: "Dallas (0xe47dbb5f1f64ff28) temperature"
+    accuracy_decimals: 1
+    update_interval: 30s
+  - platform: dallas_temp
+    one_wire_id: ow_a
+    address: 0x5e48bf5f1f64ff28
+    name: "Dallas (0x5e48bf5f1f64ff28) temperature"
+    accuracy_decimals: 1
+    update_interval: 30s
+
+  # -------- String B (GPIO14) --------
+  - platform: dallas_temp
+    one_wire_id: ow_b
+    address: 0xfc95aef91d64ff28
+    name: "Dallas (0xfc95aef91d64ff28) temperature"
+    accuracy_decimals: 1
+    update_interval: 30s
+  - platform: dallas_temp
+    one_wire_id: ow_b
+    address: 0xcd65515c1d64ff28
+    name: "Dallas (0xcd65515c1d64ff28) temperature"
+    accuracy_decimals: 1
+    update_interval: 30s
+  - platform: dallas_temp
+    one_wire_id: ow_b
+    address: 0xc9a7a35b1f64ff28
+    name: "Dallas (0xc9a7a35b1f64ff28) temperature"
+    accuracy_decimals: 1
+    update_interval: 30s
+  - platform: dallas_temp
+    one_wire_id: ow_b
+    address: 0xec57b85f1f64ff28
+    name: "Dallas (0xec57b85f1f64ff28) temperature"
+    accuracy_decimals: 1
+    update_interval: 30s
+  - platform: dallas_temp
+    one_wire_id: ow_b
+    address: 0xbe9bbc5f1f64ff28
+    name: "Dallas (0xbe9bbc5f1f64ff28) temperature"
+    accuracy_decimals: 1
+    update_interval: 30s
+  - platform: dallas_temp
+    one_wire_id: ow_b
+    address: 0xf1e8bf5f1f64ff28
+    name: "Dallas (0xf1e8bf5f1f64ff28) temperature"
+    accuracy_decimals: 1
+    update_interval: 30s
+
+  # Overige sensoren
+  - platform: wifi_signal
+    name: "${friendly_name} WiFi Signal"
+    update_interval: 60s
+  - platform: uptime
+    name: "${friendly_name} Uptime"
+    update_interval: 60s
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "${friendly_name} IP Address"
+    ssid:
+      name: "${friendly_name} SSID"
+  - platform: version
+    name: "${friendly_name} ESPHome Version"
+
+binary_sensor:
+  - platform: status
+    name: "${friendly_name} Status"
+
+button:
+  - platform: restart
+    name: "${friendly_name} Restart"
